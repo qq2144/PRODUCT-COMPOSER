@@ -1,98 +1,220 @@
-# 淘玛特立项专家 — 飞书多维表资产清单
+# 淘玛特立项专家 - 飞书多维表资产清单
 
-> 生成时间: 2026-05-21
-> 由 openclaw 自动创建
+> 创建时间: 2026-05-21
+> 创建方式: OpenClaw + lark-cli
 
 ## 多维表应用
 
 - **应用名称**: 淘玛特立项专家
-- **app_token**: `MKw3b1xReaOlcMsRAHmcYJGFn7f`
-- **应用 URL**: https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f
+- **Base Token**: `YLu7bUHjLa4rF3sOZR8cLbUGnlf`
+- **应用 URL**: https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf
 
----
+## 数据表清单
 
-## 8 张数据表
+| 序号 | 表名 | Table ID | 直达 URL |
+|---|---|---|---|
+| 1 | 01_产品立项池 | `tbl2zGUOnrFoCHwE` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tbl2zGUOnrFoCHwE |
+| 2 | 02_立项前模块预判表 | `tblvUWALNKnZp0Fm` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tblvUWALNKnZp0Fm |
+| 3 | 03_立项评分表 | `tbl1TFkdFCfMhcgF` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tbl1TFkdFCfMhcgF |
+| 4 | 04_立项路径产出表 | `tblCX4Z6mDteoqmk` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tblCX4Z6mDteoqmk |
+| 5 | 05_立项任务分发表 | `tblp45AcaKD3mDw1` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tblp45AcaKD3mDw1 |
+| 6 | 06_立项复盘表 | `tbltxU2nX0sPnNLf` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tbltxU2nX0sPnNLf |
+| 7 | 07_模块库 | `tblddaVSDrKAYIlJ` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tblddaVSDrKAYIlJ |
+| 8 | 08_货品池 | `tblZVcyd0EPw8hDc` | https://fu9yna69q3.feishu.cn/base/YLu7bUHjLa4rF3sOZR8cLbUGnlf?table=tblZVcyd0EPw8hDc |
 
-| 序号 | 表名 | table_id | 直达 URL |
-|:---:|------|----------|----------|
-| 01 | 产品立项池 | `tblYLlDhMjZ37clW` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblYLlDhMjZ37clW |
-| 02 | 立项前模块预判表 | `tbl6AYI33WcDSPqM` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tbl6AYI33WcDSPqM |
-| 03 | 立项评分表 | `tblRX2G5gX2L1q4z` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblRX2G5gX2L1q4z |
-| 04 | 立项路径产出表 | `tblnbgN27J74XnC8` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblnbgN27J74XnC8 |
-| 05 | 立项任务分发表 | `tblqYGZXcLG9Yz4w` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblqYGZXcLG9Yz4w |
-| 06 | 立项复盘表 | `tblSMdAVyGcg8aAh` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblSMdAVyGcg8aAh |
-| 07 | 模块库 | `tblX5yVRQuX79661` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblX5yVRQuX79661 |
-| 08 | 货品池 | `tblYSONxUeN3h9bI` | https://fu9yna69q3.feishu.cn/base/MKw3b1xReaOlcMsRAHmcYJGFn7f?table=tblYSONxUeN3h9bI |
+## 字段创建状态
 
-> 注：默认空表 `tblXO5sUVhetFcDA`（数据表）保留未删除，飞书 OpenAPI 暂不支持删除数据表。
+### 01_产品立项池
 
----
+**已创建字段**:
+- ID (auto_number)
+- 立项ID (text)
+- 立项名称 (text)
+- 品牌 (select)
+- 品类 (text)
+- 机会来源 (select)
+- 当前是否已有自有产品 (select)
+- 是否已有竞品验证 (select)
+- 目标用户 (text)
+- 使用场景 (text)
+- 核心痛点 (multi_select)
+- 价格带 (text)
+- 目标渠道 (multi_select)
+- 当前销售表现 (text)
+- 已知问题 (text)
+- 供应链资源 (text)
+- 品牌资产空间 (multi_select)
+- 立项前模块复用率 (number)
+- 模块闸口结论 (select)
+- 模块驱动立项原因 (select)
+- AI判断项目类型 (select)
+- 立项总分 (number)
+- 推荐动作 (select)
+- 最大机会 (text)
+- 最大风险 (text)
+- 人工确认点 (text)
+- 下一步智能体 (multi_select)
+- 当前状态 (select)
+- 提交人 (user)
+- 产品负责人 (user)
+- 代理决策人 (user)
+- Agent版本 (text)
+- 跨档触发二审 (checkbox)
+- 品类机会描述 (text)
+- 关联竞品货号 (text)
+- 关联爆品货号 (text)
+- 关联未起量货号 (text)
+- 预估成本 (number)
+- 预估售价 (number)
+- 日期 (datetime)
+- 备注 (text)
 
-## 关联关系
+### 02_立项前模块预判表
 
-| 从表 | 字段 | 关联到 | 类型 |
-|------|------|--------|------|
-| 02_立项前模块预判表 | 立项ID | 01_产品立项池 | 单向关联 |
-| 02_立项前模块预判表 | 匹配模块ID | 07_模块库 | 单向关联 |
-| 03_立项评分表 | 立项ID | 01_产品立项池 | 单向关联 |
-| 04_立项路径产出表 | 立项ID | 01_产品立项池 | 单向关联 |
-| 05_立项任务分发表 | 立项ID | 01_产品立项池 | 单向关联 |
-| 06_立项复盘表 | 立项ID | 01_产品立项池 | 单向关联 |
+**已创建字段**:
+- ID (auto_number)
+- 预判ID (text)
+- 立项ID (text)
+- 模块维度 (select)
+- 预期模块 (text)
+- 匹配状态 (select)
+- 匹配模块ID (text)
+- 预估复用率 (number)
+- 对立项影响 (select)
+- 缺失信息 (text)
+- 模块负责人 (user)
+- 下一步动作 (text)
 
----
+### 03_立项评分表
 
-## 需手动补配的字段
+**已创建字段**:
+- ID (auto_number)
+- 评分ID (text)
+- 立项ID (text)
+- 评分维度 (select)
+- 满分 (number)
+- 得分 (number)
+- 评分理由 (text)
+- 需人工确认 (text)
+- 负责人 (user)
 
-以下字段类型飞书 OpenAPI **不支持自动创建完整配置**，已创建空壳/替代字段，需人工在飞书界面补配：
+### 04_立项路径产出表
 
-| 表 | 字段名 | 问题说明 | 手动操作 |
-|----|--------|----------|----------|
-| 06_立项复盘表 | **判断是否一致** | 公式字段创建时无法通过 API 设置 `formula_expression` | 在 06 表中手动编辑该字段，配置公式：`IF(OR(AND({AI推荐动作}="建议立项",{人工最终动作}="立项"),AND({AI推荐动作}="小样测试",{人工最终动作}="小样测试"),AND({AI推荐动作}="暂缓补资料",{人工最终动作}="暂缓"),AND({AI推荐动作}="不建议立项",{人工最终动作}="放弃"),AND({AI推荐动作}="止损",{人工最终动作}="止损")),"一致","不一致")` |
-| 06_立项复盘表 | **AI推荐动作** | feishu_tables.md 标记为"关联自01（只读快照）"，但 API 不支持创建查找引用(LookUp)字段 | 如需实现从 01 表同步的只读效果，可手动将该字段改为**查找引用**字段，引用 01 表的"推荐动作" |
-| 06_立项复盘表 | **AI总分** | feishu_tables.md 标记为"关联自01（只读快照）" | 如需实现从 01 表同步的只读效果，可手动将该字段改为**查找引用**字段，引用 01 表的"立项总分" |
-| 06_立项复盘表 | **Agent版本** | feishu_tables.md 标记为"关联自01" | 如需实现从 01 表同步的只读效果，可手动将该字段改为**查找引用**字段，引用 01 表的"Agent版本" |
+**已创建字段**:
+- ID (auto_number)
+- 路径产出ID (text)
+- 立项ID (text)
+- 项目类型 (select)
+- 品类机会判断 (text)
+- 竞品池 (text)
+- 价格带分析 (text)
+- 首发单品建议 (text)
+- 用户购买原因 (text)
+- 竞品不足 (text)
+- 我们的升级方向 (text)
+- 可复用模块 (text)
+- 需新增模块 (text)
+- 模块驱动立项理由 (text)
+- 爆品成立原因 (text)
+- 可放大模块 (text)
+- 未起量原因诊断 (text)
+- 处理建议 (select)
 
----
+### 05_立项任务分发表
 
-## 字段创建状态汇总
+**已创建字段**:
+- ID (auto_number)
+- 任务ID (text)
+- 立项ID (text)
+- 任务名称 (text)
+- 任务类型 (select)
+- 负责人 (user)
+- 协同人 (user)
+- 截止时间 (datetime)
+- 输出物 (text)
+- 目标智能体 (multi_select)
+- 任务状态 (select)
+- 阻塞原因 (text)
 
-### 01_产品立项池 (tblYLlDhMjZ37clW)
-全部 31 个字段已自动创建，含：
-- 文本字段 × 14
-- 单选字段 × 8（品牌、机会来源、当前是否已有自有产品、是否已有竞品验证、模块闸口结论、模块驱动立项原因、AI判断项目类型、推荐动作、当前状态）
-- 多选字段 × 4（核心痛点、目标渠道、品牌资产空间、下一步智能体）
-- 数字字段 × 2（立项前模块复用率、立项总分）
-- 人员字段 × 3（提交人、产品负责人、代理决策人）
-- 复选框 × 1（跨档触发二审）
-- 日期字段 × 2（创建时间、更新时间，均设 auto_fill）
-- 超链接 × 1（产品资料）
+### 06_立项复盘表
 
-### 02_立项前模块预判表 (tbl6AYI33WcDSPqM)
-全部 11 个字段已自动创建，含关联字段 2 个（立项ID → 01，匹配模块ID → 07）。
+**已创建字段**:
+- ID (auto_number)
+- 复盘ID (text)
+- 立项ID (text)
+- AI推荐动作 (select)
+- AI总分 (number)
+- 人工最终动作 (select)
+- 判断是否一致 (text)
+- 立项判断是否准确 (select)
+- 实际结果 (text)
+- 误判原因 (text)
+- 沉淀规则 (text)
+- Agent版本 (text)
+- 是否进入模块化智能体 (select)
+- 复盘负责人 (user)
 
-### 03_立项评分表 (tblRX2G5gX2L1q4z)
-全部 8 个字段已自动创建，含关联字段 1 个（立项ID → 01）。
+### 07_模块库
 
-### 04_立项路径产出表 (tblnbgN27J74XnC8)
-全部 17 个字段已自动创建，含关联字段 1 个（立项ID → 01）。
+**已创建字段**:
+- ID (auto_number)
+- 临时编号 (text)
+- 模块名 (text)
+- 模块维度 (select)
+- 一句话说明 (text)
+- 关键参数 (text)
+- 适用品类 (multi_select)
+- 归属品牌 (multi_select)
+- 状态 (select)
+- 来源SKU (text)
 
-### 05_立项任务分发表 (tblqYGZXcLG9Yz4w)
-全部 11 个字段已自动创建，含关联字段 1 个（立项ID → 01）。
+### 08_货品池
 
-### 06_立项复盘表 (tblSMdAVyGcg8aAh)
-13 个字段已自动创建，含关联字段 1 个（立项ID → 01）。**公式字段需手动补配表达式**。
+**已创建字段**:
+- ID (auto_number)
+- 品类 (text)
+- 二级品类 (text)
+- 版型(细分品类) (text)
+- 代际 (text)
+- 品牌 (text)
+- 货号 (text)
+- 销量 (text)
+- 状态 (text)
+- 本代升级情况 (text)
+- 细分品类后续升级思路 (text)
+- 竞品参考链接 (text)
+- 数据来源 (text)
+- 数据来源sheet (text)
 
-### 07_模块库 (tblX5yVRQuX79661)
-全部 15 个字段已自动创建。
+## OpenAPI 不支持自动创建的字段
 
-### 08_货品池 (tblYSONxUeN3h9bI)
-全部 13 个字段已自动创建。
+以下字段类型 lark-cli / 飞书 Base OpenAPI 当前**不支持通过 API 自动创建**，需**手动在飞书界面补配**：
 
----
+| 表 | 字段名 | 期望类型 | 说明 |
+|---|---|---|---|
+| 01_产品立项池 | 产品资料 | 附件/链接 | 竞品链接、图片、参数、销售截图；OpenAPI 不支持附件字段创建 |
+| 02_立项前模块预判表 | 立项ID | 关联 | 应关联 01_产品立项池；当前为 text，需手动改为关联 |
+| 03_立项评分表 | 立项ID | 关联 | 应关联 01_产品立项池；当前为 text |
+| 04_立项路径产出表 | 立项ID | 关联 | 应关联 01_产品立项池；当前为 text |
+| 05_立项任务分发表 | 立项ID | 关联 | 应关联 01_产品立项池；当前为 text |
+| 06_立项复盘表 | 立项ID | 关联 | 应关联 01_产品立项池；当前为 text |
+| 06_立项复盘表 | 判断是否一致 | 公式 | `IF(AI推荐动作 与 人工最终动作 同档, "一致", "不一致")`；当前为 text，需手动改为公式 |
+| 06_立项复盘表 | AI推荐动作 | 关联/只读快照 | 文档要求"关联自01"只读快照；当前为独立 select |
+| 06_立项复盘表 | AI总分 | 关联/只读快照 | 文档要求"关联自01"只读快照；当前为独立 number |
+| 06_立项复盘表 | Agent版本 | 关联/只读快照 | 文档要求"关联自01"只读快照；当前为独立 text |
 
-## 下一步
+## 手动操作清单
 
-1. 手动补配 06 表"判断是否一致"公式字段
-2. （可选）将 06 表的 AI推荐动作 / AI总分 / Agent版本 改为查找引用字段
-3. 导入种子数据：07 模块库（`feishu_import/07_module_library_intake.csv`）和 08 货品池（`feishu_import/08_pallet_flat.csv`）
-4. 配置每周例会 5 个视图（在 01 表上配筛选视图）
+1. **01_产品立项池**: 手动添加 "产品资料" 附件字段
+2. **02~06 表**: 将 "立项ID" 从 text 改为 **关联字段**，关联到 01_产品立项池
+3. **06_立项复盘表**:
+   - 将 "判断是否一致" 从 text 改为 **公式字段**
+   - 配置公式: `IF(AI推荐动作 与 人工最终动作 同档, "一致", "不一致")`
+   - 或保留当前独立 select/text 字段，由 AI/人工回填
+4. **06_立项复盘表**: 如需严格实现"关联自01只读快照"，需手动创建 lookup 字段（OpenAPI 不支持）
+
+## 备注
+
+- 自动创建时间: 2026-05-21
+- 创建工具: lark-cli + Node.js 脚本
+- 身份策略: user-default（以用户身份操作）
