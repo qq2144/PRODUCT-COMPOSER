@@ -1,9 +1,12 @@
 # 淘玛特立项专家 Agent Runbook（给 openclaw 看的）
 
-> **当前版本：v1.0.1**（2026-05-23 dry-run 后增加输出映射层）
+> **当前版本：v1.0.2**（2026-05-23 dry-run 第二轮后补 04 表字段固定 schema）
 >
 > 你（openclaw / Kimi K2.6）按这份手册执行"立项专家"任务。
 > 不要"自由发挥"——所有步骤、命令、强约束都已经写死。
+>
+> **v1.0.2 关键变更**：04 表必须用固定 18 列字段名（不能用 AI 自由字段名），
+> 02 表新增「下一步动作」字段。详见 `agent_output_to_feishu_mapping.md` §3 §4。
 >
 > **v1.0.1 关键变更**：写飞书前必须先按 `openclaw_output/agent_output_to_feishu_mapping.md`
 > 对 output.json 做字段值预处理。不做预处理直接喂 lark-cli 会被飞书拒
