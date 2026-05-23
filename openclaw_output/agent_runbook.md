@@ -1,7 +1,13 @@
 # 淘玛特立项专家 Agent Runbook（给 openclaw 看的）
 
+> **当前版本：v1.0.1**（2026-05-23 dry-run 后增加输出映射层）
+>
 > 你（openclaw / Kimi K2.6）按这份手册执行"立项专家"任务。
 > 不要"自由发挥"——所有步骤、命令、强约束都已经写死。
+>
+> **v1.0.1 关键变更**：写飞书前必须先按 `openclaw_output/agent_output_to_feishu_mapping.md`
+> 对 output.json 做字段值预处理。不做预处理直接喂 lark-cli 会被飞书拒
+> （3 处 enum 不匹配 + user 字段问题）。
 
 ---
 
@@ -165,7 +171,16 @@ lark-cli base +record-get \
 
 ### Step 9：回写飞书
 
-按下面 §4 的命令模板，依次写：
+**回写前必须先做字段值映射** —— 加载 `openclaw_output/agent_output_to_feishu_mapping.md` §5 的伪代码，
+对 output.json 跑一遍 `to_feishu()` 预处理，得到 5 张表的 payload。
+
+特别注意以下转换（**漏一个就被飞书拒**）：
+- `next_agent` / `target_agent` 去"智能体"后缀
+- `module_impact_on_initiation` 自由文本 → enum（同时把原文追加到「缺失信息」末尾）
+- 「负责人」/「协同人」/「模块负责人」user 字段 **v1.0.1 阶段一律不写**
+- `当前状态` 字段由 `recommendation` 推出（mapping §5 `recommendation_to_status()`）
+
+预处理完成后,按下面 §4 的命令模板，依次写：
 
 1. **01 表 update**（更新本行）
 2. **02 表 create**（每个模块维度一条，6 条）
@@ -326,6 +341,7 @@ lark-cli base +record-create \
 - [ ] 02/03/04/05 表都按预期插入了
 - [ ] commit 了一次
 - [ ] 没有把 token / app_secret / API key 写进任何 commit 文件
+- [ ] **字段值已按 `agent_output_to_feishu_mapping.md` 映射**（next_agent / target_agent 去后缀；module_impact_on_initiation 转 enum；user 字段不写）
 
 ---
 
