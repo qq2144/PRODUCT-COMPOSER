@@ -24,6 +24,9 @@ Thumbs.db
 *.swp
 *~
 
+# 临时可视化产物（不沉淀到仓库）
+项目全景图.html
+
 # openclaw 临时产物（如果有的话）
 openclaw_output/.tmp/
 openclaw_output/*.log
