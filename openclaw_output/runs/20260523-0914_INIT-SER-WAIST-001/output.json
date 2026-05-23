@@ -1,0 +1,269 @@
+{
+  "decision_summary": {
+    "initiation_id": "INIT-SER-WAIST-001",
+    "initiation_name": "Seruna人体工学支撑护腰",
+    "brand": "Seruna",
+    "category": "护腰",
+    "project_type": "竞品产品升级",
+    "total_score": 65,
+    "recommendation": "小样测试",
+    "core_reason": "护腰市场需求明确，Seruna品牌资产可直接迁移，但护腰版型和支撑结构无现有模块，供应链和价格带均需确认。",
+    "biggest_opportunity": "Seruna品牌色、符号、语言三项资产可直接进入护腰品类，快速建立品牌识别；产后+办公场景有明确支撑不足痛点。",
+    "biggest_risk": "护腰版型和人体工学支撑结构无现有模块可复用，供应链资源='需找'尚未确认，价格带100-130低于产后护腰主流区间150-300。",
+    "next_agent": ["产品模块化智能体", "品牌资产植入智能体", "供应链打样智能体", "材料创新智能体", "财务测算智能体"],
+    "agent_version": "v1.1.0",
+    "cross_tier_review_required": false,
+    "module_gate_result": "模块中等复用，建议小样测试",
+    "estimated_module_reuse_rate": 46,
+    "manual_confirmation_required": [
+      "竞品池及竞品销量、价格、评价（竞品验证填'是'但无具体数据）",
+      "护腰版型可行性（腰围段、背部压力分布、穿戴便利性）",
+      "人体工学支撑结构（材质、硬度、位置、工艺）",
+      "奈肤亲肤材料适配护腰的克重、弹力、耐洗、温控、成本",
+      "供应链工厂能力、MOQ、打样周期",
+      "BOM成本、毛利、渠道扣点",
+      "价格带100-130与产后护腰主流150-300的偏离原因",
+      "Seruna运动防护品牌向产后+办公场景延伸的用户接受度",
+      "QA测试标准"
+    ]
+  },
+  "module_precheck": {
+    "overall_reuse_rate": 46,
+    "module_gate_result": "模块中等复用，建议小样测试",
+    "module_based_initiation_reason": "因关键模块缺失提高风险",
+    "modules": [
+      {
+        "module_dimension": "版型模块",
+        "expected_module": "护腰围裹版型",
+        "match_status": "需新增",
+        "reuse_rate": 0,
+        "matched_module_id": "需人工确认",
+        "module_impact_on_initiation": "护腰版型与护膝完全不同，无现有模块可复用，需全新定义腰围适配和背部支撑结构",
+        "unknowns": ["腰围段", "背部长度", "压力分布", "穿戴便利性"]
+      },
+      {
+        "module_dimension": "材料模块",
+        "expected_module": "奈肤亲肤接触层",
+        "match_status": "可改良",
+        "reuse_rate": 55,
+        "matched_module_id": "TMP-004",
+        "module_impact_on_initiation": "亲肤层可迁移至护腰内衬，但护腰对支撑硬度、透气性、产后温控的要求与护膝不同",
+        "unknowns": ["克重", "弹力", "耐洗", "温控", "成本"]
+      },
+      {
+        "module_dimension": "结构模块",
+        "expected_module": "人体工学支撑结构",
+        "match_status": "需新增",
+        "reuse_rate": 0,
+        "matched_module_id": "需人工确认",
+        "module_impact_on_initiation": "核心差异点，但无现有模块可复用，需全新定义背部支撑结构（记忆棉/钢板/弹力带）",
+        "unknowns": ["支撑材质", "硬度", "位置", "工艺", "与版型配合"]
+      },
+      {
+        "module_dimension": "外观模块",
+        "expected_module": "Seruna蓝与品牌符号",
+        "match_status": "可改良",
+        "reuse_rate": 70,
+        "matched_module_id": "TMP-001",
+        "module_impact_on_initiation": "Seruna蓝和品牌符号可迁移至护腰，但护腰面积大，使用比例和位置需重新设计",
+        "unknowns": ["色号", "使用比例", "位置", "品牌符号在护腰上的呈现方式"]
+      },
+      {
+        "module_dimension": "功能模块",
+        "expected_module": "通用防滑系统",
+        "match_status": "可改良",
+        "reuse_rate": 60,
+        "matched_module_id": "TMP-005",
+        "module_impact_on_initiation": "防滑结构可迁移，但护腰核心问题是'卷边'而非'滑落'，防滑设计需重新适配",
+        "unknowns": ["防滑宽度", "卷边解决方案", "皮肤刺激性"]
+      },
+      {
+        "module_dimension": "包装模块",
+        "expected_module": "Seruna医疗感包装盒",
+        "match_status": "可复用",
+        "reuse_rate": 90,
+        "matched_module_id": "TMP-003",
+        "module_impact_on_initiation": "医疗感包装可直接复用，快速建立品牌可信感，护腰尺寸可能需调整包装规格",
+        "unknowns": ["条码", "执行标准", "尺寸"]
+      }
+    ],
+    "missing_core_modules": ["护腰围裹版型", "人体工学支撑结构"],
+    "recommended_module_next_action": "进入产品模块化智能体，优先定义护腰版型和人体工学支撑结构两个核心缺失模块，并复核可迁移模块清单。"
+  },
+  "scorecard": [
+    {
+      "dimension": "市场需求",
+      "max_score": 15,
+      "score": 9,
+      "reason": "护腰是成熟品类，产后恢复和办公久坐需求明确，但缺少平台搜索量与规模数据，按锚点中档处理。",
+      "unknowns": ["具体平台搜索量", "产后护腰细分品类规模", "办公久坐人群渗透率"]
+    },
+    {
+      "dimension": "竞品验证",
+      "max_score": 15,
+      "score": 9,
+      "reason": "飞书记录填'竞品已验证'但缺少具体链接、价格和销量数据，按锚点中档处理。",
+      "unknowns": ["竞品池", "竞品价格带", "竞品销量", "用户评价关键词"]
+    },
+    {
+      "dimension": "品牌承载力",
+      "max_score": 15,
+      "score": 15,
+      "reason": "品牌资产空间明确列出品牌色、品牌符号、品牌语言三项，可直接进入护腰产品。",
+      "unknowns": ["Seruna运动防护品牌向产后+办公场景延伸的用户接受度"]
+    },
+    {
+      "dimension": "差异化空间",
+      "max_score": 15,
+      "score": 15,
+      "reason": "材料(奈肤亲肤可迁移)和外观(Seruna蓝+品牌符号)至少2项可建立明显差异；人体工学支撑结构为潜在第三差异项。",
+      "unknowns": ["人体工学支撑结构能否真实改善腰部支撑体验"]
+    },
+    {
+      "dimension": "供应链可行性",
+      "max_score": 15,
+      "score": 4,
+      "reason": "供应链资源='需找'，无确认工厂；护腰工艺（针织+支撑结构）路线不清，按锚点最低档处理。",
+      "unknowns": ["工厂", "MOQ", "打样周期", "工艺路线"]
+    },
+    {
+      "dimension": "内容表达性",
+      "max_score": 10,
+      "score": 6,
+      "reason": "卖点明确（支撑不足、产后恢复、办公久坐）但需要测试和素材验证，按锚点中档处理。",
+      "unknowns": ["测试数据", "可视化素材", "短视频脚本验证"]
+    },
+    {
+      "dimension": "模块复用价值",
+      "max_score": 20,
+      "score": 12,
+      "reason": "综合模块复用率46%，落在40-69%区间，按锚点中档处理。外观、包装、材料可迁移，但版型和结构为核心缺失。",
+      "unknowns": ["版型模块验证", "结构模块定义", "材料适配护腰"]
+    },
+    {
+      "dimension": "成本和价格带合理性",
+      "max_score": 5,
+      "score": 1,
+      "reason": "价格带100-130已填，但BOM和成本均不清；且该价格带低于产后护腰主流区间150-300，存在定价风险。按锚点最低档处理。",
+      "unknowns": ["目标成本", "毛利", "渠道扣点", "价格带偏离原因"]
+    }
+  ],
+  "path_output": {
+    "competitor_upgrade_output": {
+      "why_users_buy_competitors": "需要腰部支撑、产后恢复辅助、办公久坐缓解",
+      "problems_competitors_solve": "腰部支撑、产后收腹、久坐疲劳缓解",
+      "competitor_shortcomings": "品牌白牌化、缺乏专业可信感、材料闷热、支撑结构单一、产后场景针对性不足",
+      "brand_upgrade_direction": "用Seruna蓝、品牌符号、品牌语言建立护腰品类的品牌识别；医疗感包装建立可信感",
+      "material_upgrade_direction": "导入奈肤亲肤接触层作为护腰内衬，降低摩擦、闷热，提升产后敏感皮肤适配性",
+      "structure_upgrade_direction": "定义人体工学支撑结构（记忆棉/弹力带分区支撑），区别于普通钢板护腰",
+      "existing_modules_for_upgrade": ["Seruna蓝外观色", "品牌符号", "奈肤亲肤接触层", "通用防滑结构", "Seruna医疗感包装盒"],
+      "supply_chain_upgrade_direction": "验证护腰针织工艺、支撑结构（记忆棉/弹力带）成型工艺、分区缝制能力",
+      "appearance_differentiation": "蓝白灰克制医疗感，Seruna蓝点缀，品牌符号在护腰正面的结构化呈现",
+      "function_differentiation": "腰部支撑、产后恢复、办公久坐缓解、亲肤透气、防滑卷边",
+      "detail_page_selling_point_differentiation": "人体工学支撑、奈肤亲肤内衬、产后+办公双场景、Seruna专业修复感",
+      "cost_comparison": "需人工确认"
+    }
+  },
+  "risk_list": [
+    {
+      "risk": "护腰版型和支撑结构无现有模块，开发周期长",
+      "severity": "高",
+      "owner": "党英轩/曹树洋",
+      "next_action": "进入产品模块化智能体定义版型和结构模块"
+    },
+    {
+      "risk": "供应链未确认，价格带100-130低于主流区间",
+      "severity": "高",
+      "owner": "供应链/财务",
+      "next_action": "找工厂、输出BOM和成本测算"
+    },
+    {
+      "risk": "Seruna运动防护品牌向产后+办公场景延伸，用户接受度不确定",
+      "severity": "高",
+      "owner": "黄学善/运营",
+      "next_action": "做品牌场景延伸测试"
+    },
+    {
+      "risk": "材料闷热或不亲肤",
+      "severity": "中",
+      "owner": "那日苏",
+      "next_action": "提供2-3种护腰内衬材料方案"
+    },
+    {
+      "risk": "防滑结构无法解决护腰卷边问题",
+      "severity": "中",
+      "owner": "产品/供应链",
+      "next_action": "验证腰部卷边解决方案"
+    },
+    {
+      "risk": "竞品数据不足导致立项判断偏差",
+      "severity": "中",
+      "owner": "曹树洋",
+      "next_action": "补充护腰竞品池和价格带分析"
+    },
+    {
+      "risk": "医疗化表达过度",
+      "severity": "中",
+      "owner": "内容/品牌",
+      "next_action": "避免治疗功效宣称"
+    }
+  ],
+  "task_dispatch": [
+    {
+      "task_name": "建立护腰竞品池",
+      "owner": "曹树洋",
+      "deadline": "D1",
+      "output": "3-10个竞品链接、价格、销量、评价",
+      "target_agent": "品类增长智能体"
+    },
+    {
+      "task_name": "立项前模块复用复核",
+      "owner": "党英轩",
+      "deadline": "D1",
+      "output": "复用/改良/新增模块清单",
+      "target_agent": "产品模块化智能体"
+    },
+    {
+      "task_name": "定义护腰版型和支撑结构",
+      "owner": "党英轩/曹树洋",
+      "deadline": "D2",
+      "output": "护腰版型+人体工学支撑结构模块草案",
+      "target_agent": "产品模块化智能体"
+    },
+    {
+      "task_name": "输出品牌资产植入方案",
+      "owner": "黄学善",
+      "deadline": "D2",
+      "output": "Seruna蓝、品牌符号、品牌语言在护腰上的呈现方案",
+      "target_agent": "品牌资产植入智能体"
+    },
+    {
+      "task_name": "匹配亲肤材料方案",
+      "owner": "那日苏",
+      "deadline": "D2",
+      "output": "2-3款护腰内衬材料卡",
+      "target_agent": "材料创新智能体"
+    },
+    {
+      "task_name": "验证打样工艺和成本",
+      "owner": "供应链",
+      "deadline": "D3",
+      "output": "工厂能力、MOQ、打样周期、初版成本",
+      "target_agent": "供应链打样智能体"
+    },
+    {
+      "task_name": "测算价格带和毛利",
+      "owner": "财务",
+      "deadline": "D3",
+      "output": "目标成本和毛利测算，解释100-130偏离原因",
+      "target_agent": "财务测算智能体"
+    },
+    {
+      "task_name": "输出卖点表达方向",
+      "owner": "内容团队",
+      "deadline": "D3",
+      "output": "短视频卖点和详情页差异",
+      "target_agent": "内容短视频智能体"
+    }
+  ]
+}
