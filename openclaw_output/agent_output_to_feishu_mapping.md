@@ -37,30 +37,42 @@
 
 ---
 
-## 2. module_impact_on_initiation —— 自由文本 → 枚举
+## 2. module_impact_on_initiation —— 由 match_status 直接映射（v1.0.1 修订）
 
 ### 命中位置
-- `output.json` → `module_precheck.modules[].module_impact_on_initiation`（自由 string）
 - 写 **02 表「对立项影响」**（select，6 个 enum）
+- 数据源：`output.json` → `module_precheck.modules[].match_status`（**不是** `module_impact_on_initiation` 自由文本）
+
+### 为什么不用自由文本做关键词匹配
+首版用关键词匹配自由文本，dry-run 暴露两个问题：
+- "降低品牌化设计难度，但山型符号结构化版本未验证" —— 同时命中正向和负向关键词，按优先级短路会丢真实意图
+- "可快速形成品牌可信感" —— 关键词表覆盖不到，兜底为"需人工确认"，但实际是"降低开发难度"
+
+AI 已经在 `match_status` 字段做了 5 选 1 的 enum 决策，**这才是更稳的语义信号**。
+直接映射，不做反推。
 
 ### 映射规则
-读自由文本，**按以下顺序匹配关键词**（短路），落到对应 enum：
 
-| 优先级 | 关键词 | 落到 enum |
-|---|---|---|
-| 1 | "需新增" / "缺失" / "无现有" / "风险" / "无法验证" | 增加风险 |
-| 2 | "构成核心差异" / "差异化" / "独特性" / "卖点" | 构成核心差异 |
-| 3 | "快速升级" / "可支持小样" / "可改良" / "升级理由" | 支撑快速升级 |
-| 4 | "降低难度" / "降低打样" / "更简单" / "已量产可直接用" | 降低开发难度 |
-| 5 | "不影响" / "无关" / "可忽略" | 不影响 |
-| 兜底 | 都不命中 | 需人工确认 |
+| AI 输出 match_status | 写飞书 02 表「对立项影响」 |
+|---|---|
+| 可复用 | 降低开发难度 |
+| 可改良 | 支撑快速升级 |
+| 需新增 | 增加风险 |
+| 无效/禁用 | 增加风险 |
+| 需人工确认 | 需人工确认 |
 
-### 同时保留原文
-飞书 02 表的「缺失信息」字段（长文本）追加一段：
+> 注意：飞书 02 表 enum 还有「构成核心差异」「不影响」两个值，但 match_status 没有对应概念，
+> v1.0.1 阶段不主动落到这两个值。等业务定义升版时再补。
+
+### 自由文本去哪
+`module_impact_on_initiation` 整段拼到飞书 02 表「缺失信息」字段末尾：
+
 ```
-原始判断：<AI 自由文本>
+缺失信息: <unknowns 数组逗号拼接>
+原始判断: <module_impact_on_initiation 原文>
 ```
-这样人工 review 时还能看到 AI 的本意，select 字段不丢失语境。
+
+这样人工 review 时既能看到 select 结论，又能看到 AI 的原始语境。
 
 ---
 
@@ -140,7 +152,7 @@ def to_feishu(output_json):
             "匹配状态":   m.match_status,
             "匹配模块ID": m.matched_module_id,
             "预估复用率": m.reuse_rate,
-            "对立项影响": map_module_impact(m.module_impact_on_initiation),  # ← 映射
+            "对立项影响": map_module_impact_by_status(m.match_status),  # ← 改用 match_status 映射
             "缺失信息":   ", ".join(m.unknowns) + f"\n原始判断：{m.module_impact_on_initiation}",
             # 模块负责人字段：v1.0.1 阶段不写
         }
@@ -196,18 +208,16 @@ def recommendation_to_status(rec: str) -> str:
         "止损":         "放弃",
     }.get(rec, "待补资料")
 
-def map_module_impact(text: str) -> str:
-    rules = [
-        (["需新增", "缺失", "无现有", "风险", "无法验证"], "增加风险"),
-        (["构成核心差异", "差异化", "独特性", "卖点"],     "构成核心差异"),
-        (["快速升级", "可支持小样", "可改良", "升级理由"], "支撑快速升级"),
-        (["降低难度", "降低打样", "更简单", "可直接用"],   "降低开发难度"),
-        (["不影响", "无关", "可忽略"],                     "不影响"),
-    ]
-    for keywords, enum_val in rules:
-        if any(k in text for k in keywords):
-            return enum_val
-    return "需人工确认"
+def map_module_impact_by_status(match_status: str) -> str:
+    # v1.0.1 修订：直接从 match_status 映射，不再用 free-text 关键词反推。
+    # 原因：AI 已经在 match_status 字段做了 enum 决策，那才是更稳的语义信号。
+    return {
+        "可复用":      "降低开发难度",
+        "可改良":      "支撑快速升级",
+        "需新增":      "增加风险",
+        "无效/禁用":   "增加风险",
+        "需人工确认":  "需人工确认",
+    }.get(match_status, "需人工确认")
 
 def infer_task_type(t) -> str:
     # 按 target_agent 推任务类型
