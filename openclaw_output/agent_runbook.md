@@ -1,9 +1,12 @@
 # 淘玛特立项专家 Agent Runbook（给 openclaw 看的）
 
-> **当前版本：v1.0.2**（2026-05-23 dry-run 第二轮后补 04 表字段固定 schema）
+> **当前版本：v1.0.3**（2026-05-23 Round 3a 写权限验证后修正 lark-cli 命令名）
 >
 > 你（openclaw / Kimi K2.6）按这份手册执行"立项专家"任务。
 > 不要"自由发挥"——所有步骤、命令、强约束都已经写死。
+>
+> **v1.0.3 关键变更**：lark-cli 没有 `+record-create` / `+record-update`，create + update 都用 `+record-upsert`：
+> 带 `--record-id` 是 update，不带是 create。`--fields` 也不存在，参数是 `--json`。所有 §4 命令模板已更新。
 >
 > **v1.0.2 关键变更**：04 表必须用固定 18 列字段名（不能用 AI 自由字段名），
 > 02 表新增「下一步动作」字段。详见 `agent_output_to_feishu_mapping.md` §3 §4。
@@ -241,14 +244,14 @@ lark-cli base +record-get \
   --record-id  <record_id>
 ```
 
-### 4.3 更新 01 表本行
+### 4.3 更新 01 表本行（update = `+record-upsert` with `--record-id`）
 
 ```bash
-lark-cli base +record-update \
+lark-cli base +record-upsert \
   --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
   --table-id   tbl2zGUOnrFoCHwE \
   --record-id  <record_id> \
-  --fields     '{
+  --json '{
     "立项前模块复用率": 65,
     "模块闸口结论": "模块中等复用，建议小样测试",
     "模块驱动立项原因": "因升级中可复用模块降低难度",
@@ -266,14 +269,15 @@ lark-cli base +record-update \
 ```
 
 **字段名要跟飞书表里**完全一致**（看 `openclaw_output/01_actual_fields.md`）。**
+**预跑安全模式**：第一次写新表前可先加 `--dry-run` 看请求 shape，确认 OK 再去掉真跑。
 
-### 4.4 往 02 表插入模块预判记录
+### 4.4 往 02 表插入模块预判记录（create = `+record-upsert` no `--record-id`）
 
 ```bash
-lark-cli base +record-create \
+lark-cli base +record-upsert \
   --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
   --table-id   tblvUWALNKnZp0Fm \
-  --fields     '{
+  --json '{
     "预判ID": "MPRE-INIT-SER-KNEE-001-001",
     "立项ID": "INIT-SER-KNEE-001",
     "模块维度": "材料模块",
@@ -282,20 +286,22 @@ lark-cli base +record-create \
     "匹配模块ID": "TMP-004",
     "预估复用率": 60,
     "对立项影响": "支撑快速升级",
-    "缺失信息": "克重、弹力、耐洗、成本",
-    "下一步动作": "进入材料创新智能体复核"
+    "缺失信息": "克重、弹力、耐洗、成本\n原始判断：...",
+    "下一步动作": "进入产品模块化智能体复核改良方向"
   }'
 ```
 
-6 个模块维度都要写，**就算 match_status 是"无效/禁用"也要写一条**，方便复盘看 AI 当时怎么想的。
+6 个模块维度都要写。**注意**：`对立项影响` / `下一步动作` 必须按 `agent_output_to_feishu_mapping.md` §2 §4 转换，不能直接塞自由文本。
+
+> **批量优化**：6 条可以用 `+record-batch-create` 一次写。Demo 阶段 6 次单写也够快，先保证正确再优化。
 
 ### 4.5 往 03 表插入评分记录（8 条）
 
 ```bash
-lark-cli base +record-create \
+lark-cli base +record-upsert \
   --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
   --table-id   tbl1TFkdFCfMhcgF \
-  --fields     '{
+  --json '{
     "评分ID": "SCORE-INIT-SER-KNEE-001-001",
     "立项ID": "INIT-SER-KNEE-001",
     "评分维度": "市场需求",
@@ -310,11 +316,60 @@ lark-cli base +record-create \
 
 ### 4.6 往 04 表插入路径产出（1 条）
 
-字段按项目类型选填（不适用的字段留空）。
+字段必须按 `agent_output_to_feishu_mapping.md` §3 的固定 18 列 schema 来，**不能用 AI 自由字段名**。
+
+```bash
+lark-cli base +record-upsert \
+  --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
+  --table-id   tblCX4Z6mDteoqmk \
+  --json '{
+    "路径产出ID": "PATH-INIT-SER-KNEE-001-001",
+    "立项ID": "INIT-SER-KNEE-001",
+    "项目类型": "竞品产品升级",
+    "用户购买原因": "...",
+    "竞品池": "...",
+    "竞品不足": "...",
+    "我们的升级方向": "品牌升级：...\n材料升级：...\n结构升级：...",
+    "可复用模块": "...",
+    "需新增模块": "...",
+    "模块驱动立项理由": "..."
+  }'
+```
+
+不属于当前 project_type 的字段不写（飞书侧自动留空）。
 
 ### 4.7 往 05 表插入任务（N 条）
 
-`目标智能体` 是 multi_select，传数组：`["产品模块化", "品牌资产"]`。
+```bash
+lark-cli base +record-upsert \
+  --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
+  --table-id   tblp45AcaKD3mDw1 \
+  --json '{
+    "任务ID": "TASK-INIT-SER-KNEE-001-001",
+    "立项ID": "INIT-SER-KNEE-001",
+    "任务名称": "建立护膝竞品池",
+    "任务类型": "品类",
+    "截止时间": "D1",
+    "输出物": "3-10个竞品链接、价格、销量、评价",
+    "目标智能体": ["品类增长"],
+    "任务状态": "待开始"
+  }'
+```
+
+`目标智能体` 是 multi_select，传数组，**字面值不能带"智能体"后缀**（mapping §1）。
+「负责人」/「协同人」user 字段 v1.0.x 不写。
+
+### 4.8 删除测试/脏数据记录（high-risk）
+
+```bash
+lark-cli base +record-delete \
+  --base-token YLu7bUHjLa4rF3sOZR8cLbUGnlf \
+  --table-id   <table_id> \
+  --record-id  <record_id> \
+  --yes
+```
+
+`--yes` 必须加，否则会被卡在 confirm 提示上。正常立项处理流程不应该触发 delete。
 
 ---
 
