@@ -8,6 +8,7 @@ import { loadData } from './services/dataLoader.js';
 import { overviewRoute } from './routes/overview.js';
 import { productsRoute } from './routes/products.js';
 import { modulesRoute } from './routes/modules.js';
+import { composeRoute } from './routes/compose.js';
 
 const app = Fastify({
   logger: {
@@ -38,14 +39,16 @@ async function bootstrap() {
   await app.register(overviewRoute);
   await app.register(productsRoute);
   await app.register(modulesRoute);
+  await app.register(composeRoute);
 
   // 启动
   await app.listen({ port: config.port, host: config.host });
   app.log.info(`🚀 后端已启动: http://${config.host}:${config.port}`);
-  app.log.info(`   GET /api/health    健康检查`);
-  app.log.info(`   GET /api/overview  总览数据（驾驶舱）`);
-  app.log.info(`   GET /api/products  SKU 查询（支持 brand/category/q/...）`);
-  app.log.info(`   GET /api/modules   模块查询`);
+  app.log.info(`   GET  /api/health    健康检查`);
+  app.log.info(`   GET  /api/overview  总览数据（驾驶舱）`);
+  app.log.info(`   GET  /api/products  SKU 查询`);
+  app.log.info(`   GET  /api/modules   模块查询`);
+  app.log.info(`   POST /api/compose   组合器 ⭐ M3 核心`);
 }
 
 bootstrap().catch((err) => {

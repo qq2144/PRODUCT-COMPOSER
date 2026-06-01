@@ -66,3 +66,61 @@ export interface ProductsQuery {
   limit?: number;
   offset?: number;
 }
+
+// ============ 组合器 (M3) ============
+export interface ParsedIntent {
+  category: string;
+  userScenes: string[];
+  functions: string[];
+  brand: string;
+  style: string;
+  rawText: string;
+}
+
+export interface MatchedModule {
+  moduleId: string;
+  moduleType: string;
+  moduleName: string;
+  factory: string;
+  material: string;
+  reuseCount: number;
+  matchReason: string;
+  matchedKeywords: string[];
+}
+
+export interface AssetComparison {
+  sameCategorySkuCount: number;
+  sameCategoryBrands: string[];
+  topSeller: {
+    productAbbrev: string;
+    name: string;
+    brand: string;
+    totalSales: number;
+  } | null;
+  totalSalesInCategory: number;
+  competitorIntelCount: number;
+}
+
+export interface OpportunityQuadrant {
+  label: '明星' | '潜力' | '红海' | '鸡肋' | '未知';
+  emoji: string;
+  marketSize: 'large' | 'small';
+  demandStrength: 'strong' | 'weak';
+  reasoning: string;
+}
+
+export interface ConceptCardDraft {
+  name: string;
+  summary: string;
+  moduleCount: number;
+  needsValidation: string[];
+}
+
+export interface ComposeResult {
+  parsedIntent: ParsedIntent;
+  matchedModules: Record<string, MatchedModule[]>;
+  totalMatchedModules: number;
+  assetComparison: AssetComparison;
+  opportunityQuadrant: OpportunityQuadrant;
+  conceptCardDraft: ConceptCardDraft;
+}

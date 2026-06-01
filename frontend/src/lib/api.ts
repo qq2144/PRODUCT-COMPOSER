@@ -2,7 +2,7 @@
  * axios 客户端 - 与后端通信
  */
 import axios from 'axios';
-import type { Overview, PageResult, ProductAsset, ProductsQuery, Module } from './types';
+import type { Overview, PageResult, ProductAsset, ProductsQuery, Module, ComposeResult } from './types';
 
 const http = axios.create({
   baseURL: '/api',
@@ -39,4 +39,7 @@ export const api = {
       links: Array<{ module_id: string; reuse_idx: string; product_name: string; product_code: string; reuse_position: string }>;
       relatedProducts: Array<ProductAsset & { reusePosition: string }>;
     }>(`/modules/${encodeURIComponent(moduleId)}`).then((r) => r.data),
+
+  compose: (text: string) =>
+    http.post<ComposeResult>('/compose', { text }).then((r) => r.data),
 };
