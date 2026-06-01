@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>淘玛特产品组合器 · 汇报 Demo v2</title>
+<title>淘玛特产品组合器 · 汇报 Demo v3</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -373,8 +373,8 @@
 <section class="hero">
   <div class="tag">PRODUCT COMPOSER · v1 DEMO</div>
   <h1>淘玛特产品组合器</h1>
-  <div class="tagline">用一句话描述想要什么，AI 用已有模块拼出一个产品草案。</div>
-  <div class="tagline" style="font-size:16px;opacity:0.85;">让"模块复用"从一句口号，变成产品部每天用的工作台。</div>
+  <div class="tagline">导入货盘或写一句想法，AI 先沉淀资产，再用已有模块拼出产品草案。</div>
+  <div class="tagline" style="font-size:16px;opacity:0.85;">让"产品录入"无痛，让"模块复用"变成产品部每天用的工作台。</div>
   <div class="meta">汇报版本 · 2026 年 5 月 · 仅供内部产品部使用</div>
 </section>
 
@@ -384,13 +384,13 @@
   <div class="section-sub">这一版我们做了一次方向纠偏——从"审批工具"转向"创造工具"。</div>
   <div class="pivot">
     <div class="pivot-card old">
-      <div class="title">原方向 · 立项判断系统</div>
+      <div class="title">已剪枝 · 填表评分系统</div>
       <h3>给已有的想法打分</h3>
       <ul class="pivot-bullets">
         <li>填一大堆字段</li>
         <li>AI 自动分类 + 评分 + 推荐动作</li>
-        <li>党总过审定生死</li>
-        <li>低频：每周几条立项</li>
+        <li>负责人过审定生死</li>
+        <li>低频：每周几条机会</li>
         <li>本质：管理工具，用户是"被评审者"</li>
       </ul>
     </div>
@@ -399,20 +399,25 @@
       <div class="title">新方向 · 产品组合器</div>
       <h3>帮人快速生出新想法</h3>
       <ul class="pivot-bullets">
+        <li>货盘导入自动解析产品资产</li>
         <li>一句话描述 + 5 维度（可逐个修改）</li>
         <li>AI 用模块库的积木拼产品草案</li>
-        <li>自动对照现有产品库判定升级类型</li>
+        <li>点击品类缺口 / 未起量 SKU 进入组合</li>
+        <li>运营提案先过证据闸口</li>
         <li>高频：每天几十次构思</li>
         <li>本质：创造工具，用户是"创作者"</li>
       </ul>
     </div>
   </div>
+  <div style="margin-top:18px;padding:16px 20px;background:#fff7ed;border-left:4px solid #f97316;border-radius:0 8px 8px 0;font-size:13px;line-height:1.75;color:#7c2d12;">
+    <strong>朱浩反馈后的修正</strong>：产品部构思可以直接进组合器；运营提案不能直接进组合器。运营提交的是商业机会假设，先过“证据闸口”：通过、补证据、退回运营动作、合并到已有迭代。否则会变成“模块草案很多，但立项本身不成立”。
+  </div>
 </section>
 
 <!-- ============ 2. 用户画像 ============ -->
 <section class="section">
-  <div class="section-title"><span class="section-num">2</span>用户：产品部 4 人</div>
-  <div class="section-sub">这一版只给产品部内部用，不开放给其他部门。先把"自己人"用爽再说。</div>
+  <div class="section-title"><span class="section-num">2</span>用户：产品部 4 人 + 运营提案入口</div>
+  <div class="section-sub">核心工作台仍然给产品部内部用；运营只提交提案证据，不直接使用组合器产出方案。</div>
   <div class="users">
     <div class="user-card"><div class="user-avatar">党</div><div class="user-name">党英轩</div><div class="user-role">产品总负责人</div><div class="user-action">心血来潮想做新品类，一句描述看 AI 拼啥</div></div>
     <div class="user-card"><div class="user-avatar">曹</div><div class="user-name">曹树洋</div><div class="user-role">A级品类设计师</div><div class="user-action">看品类缺口，快速搭一个新版型草案</div></div>
@@ -461,7 +466,7 @@
     </div>
   </div>
   <div style="margin-top:16px;padding:14px 18px;background:#f0f7ff;border-radius:8px;font-size:13px;color:#1d4f8b;">
-    💡 <strong>核心规则</strong>：内层模块组合 = 可直接生产；外层素材进入"自由畅想区"，被勾选后触发"立项打样" → 验证成功才升级为内层模块。
+    💡 <strong>核心规则</strong>：内层模块组合 = 可直接生产；外层素材进入"自由畅想区"，被勾选后触发"验证打样" → 验证成功才升级为内层模块。
   </div>
 </section>
 
@@ -747,7 +752,7 @@
 <!-- ============ 9. 自动汇报页 ============ -->
 <section class="section">
   <div class="section-title"><span class="section-num">9</span>自动汇报页（含未起量提醒）</div>
-  <div class="section-sub">本月数据自动汇总。网页形式，可截图发飞书。后期支持飞书消息卡片推送。</div>
+  <div class="section-sub">本月数据自动汇总。网页形式，可截图、导出 PDF 或同步到内部汇报页。</div>
 
   <div class="report-page">
     <div class="report-header">
@@ -788,7 +793,7 @@
       <div class="underperform-row">
         <div class="sku-name">JFK 护膝二代（暂无货号）</div>
         <div class="sku-sales">打样中</div>
-        <div class="sku-diag">诊断：产品定义模糊，建议重新立项</div>
+        <div class="sku-diag">诊断：产品定义模糊，建议重新定义</div>
         <div class="sku-action">→ 去迭代构思</div>
       </div>
       <div class="underperform-row">
@@ -822,14 +827,127 @@
     </div>
 
     <div style="text-align:center;">
-      <button class="export-btn">📤 截图 / 导出 PDF（v1.5 加：发送到飞书）</button>
+      <button class="export-btn">📤 截图 / 导出 PDF</button>
     </div>
   </div>
 </section>
 
-<!-- ============ 10. 技术架构 ============ -->
+<!-- ============ 10. 运营入口 · 证据闸口 + 机会象限 ============ -->
 <section class="section">
-  <div class="section-title"><span class="section-num">10</span>技术架构（极简）</div>
+  <div class="section-title"><span class="section-num">10</span>运营入口 · 证据闸口 + 机会象限</div>
+  <div class="section-sub">朱浩反馈"运营提案不能直接进组合器"——这一节解决它。灵感来自外部参考的「品类需求研究平台」。</div>
+
+  <!-- E0-E3 证据分级 -->
+  <h3 style="font-size:17px;margin:8px 0 14px;color:#1d1d1f;">🛡️ 证据 E0–E3 分级</h3>
+  <div style="color:#6e6e73;font-size:13px;margin-bottom:14px;">证据不是"有/没有"二元，而是 4 级，直接决定闸口路由——不打分，按字段规则分流。</div>
+
+  <table style="width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:24px;">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:10px 12px;background:#f5f5f7;border-radius:8px 0 0 8px;width:60px;">等级</th>
+        <th style="text-align:left;padding:10px 12px;background:#f5f5f7;">证据形态</th>
+        <th style="text-align:left;padding:10px 12px;background:#f5f5f7;">典型例子</th>
+        <th style="text-align:left;padding:10px 12px;background:#f5f5f7;border-radius:0 8px 8px 0;width:200px;">闸口路由</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #f0f0f3;">
+        <td style="padding:12px;font-weight:700;color:#86868b;">E0</td>
+        <td style="padding:12px;">猜想，无证据</td>
+        <td style="padding:12px;color:#6e6e73;">"我觉得这个能爆"、口头转述</td>
+        <td style="padding:12px;"><span style="background:#f3f4f6;color:#374151;padding:3px 8px;border-radius:4px;font-size:11px;">→ 猜想池</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f0f0f3;background:#fef2f2;">
+        <td style="padding:12px;font-weight:700;color:#dc2626;">E1</td>
+        <td style="padding:12px;">单一证据</td>
+        <td style="padding:12px;color:#6e6e73;">1 个竞品链接 / 1 条客诉截图</td>
+        <td style="padding:12px;"><span style="background:#fee2e2;color:#991b1b;padding:3px 8px;border-radius:4px;font-size:11px;">⚠️ 退回补料</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid #f0f0f3;background:#fefce8;">
+        <td style="padding:12px;font-weight:700;color:#d97706;">E2</td>
+        <td style="padding:12px;">多源证据</td>
+        <td style="padding:12px;color:#6e6e73;">竞品链接 + 销量截图 + 自家 SKU 对比</td>
+        <td style="padding:12px;"><span style="background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:4px;font-size:11px;">→ 待审区（人决策）</span></td>
+      </tr>
+      <tr style="background:#f0fdf4;">
+        <td style="padding:12px;font-weight:700;color:#16a34a;">E3</td>
+        <td style="padding:12px;">大规模证据</td>
+        <td style="padding:12px;color:#6e6e73;">平台搜索量 + 类目大盘 + 多竞品销量 + 客诉聚合</td>
+        <td style="padding:12px;"><span style="background:#dcfce7;color:#14532d;padding:3px 8px;border-radius:4px;font-size:11px;">✅ 绿色通道</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 4 象限可视化 -->
+  <h3 style="font-size:17px;margin:24px 0 14px;color:#1d1d1f;">🎯 机会象限速判（替代 0-100 总分）</h3>
+  <div style="color:#6e6e73;font-size:13px;margin-bottom:14px;">不打分，看落在哪个象限。党总打开看到的是"明星/潜力/红海/鸡肋"四个字，不是 79 还是 81。</div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;">
+    <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:18px 20px;">
+      <div style="font-size:22px;font-weight:700;color:#92400e;margin-bottom:4px;">🌟 明星场景</div>
+      <div style="font-size:12px;color:#78350f;margin-bottom:8px;">大市场 × 强需求</div>
+      <div style="font-size:13px;color:#78350f;">已被市场验证、需求明确<br><strong>→ 重点投入，必做</strong></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:2px solid #3b82f6;border-radius:14px;padding:18px 20px;">
+      <div style="font-size:22px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">⭐ 潜力场景</div>
+      <div style="font-size:12px;color:#1e40af;margin-bottom:8px;">小市场 × 强需求</div>
+      <div style="font-size:13px;color:#1e40af;">细分人群强需求，小而美<br><strong>→ 小样测试，先验证再放大</strong></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#e0f2fe,#cffafe);border:2px solid #0891b2;border-radius:14px;padding:18px 20px;">
+      <div style="font-size:22px;font-weight:700;color:#0c4a6e;margin-bottom:4px;">🌊 红海场景</div>
+      <div style="font-size:12px;color:#075985;margin-bottom:8px;">大市场 × 弱需求</div>
+      <div style="font-size:13px;color:#075985;">大盘很大但已饱和<br><strong>→ 仅当能做出明显差异时才入场</strong></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#f3f4f6,#e5e7eb);border:2px solid #6b7280;border-radius:14px;padding:18px 20px;">
+      <div style="font-size:22px;font-weight:700;color:#374151;margin-bottom:4px;">❌ 鸡肋场景</div>
+      <div style="font-size:12px;color:#4b5563;margin-bottom:8px;">小市场 × 弱需求</div>
+      <div style="font-size:13px;color:#4b5563;">又小又冷<br><strong>→ 默认放弃</strong></div>
+    </div>
+  </div>
+
+  <div style="background:#f0fdf4;border-left:4px solid #16a34a;border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:#14532d;">
+    💡 <strong>数据驱动定位</strong>：象限不是 AI 主观猜的，是规则算的——
+    <br>• <strong>市场规模</strong>：来自 product_assets.csv 同品类销量加总 + 平台大盘搜索量
+    <br>• <strong>需求强度</strong>：来自竞品销量、搜索热度、客诉聚合、达人视频量
+  </div>
+
+  <!-- 证据 × 象限 组合矩阵 -->
+  <h3 style="font-size:17px;margin:24px 0 14px;color:#1d1d1f;">🔀 证据等级 × 机会象限 = 最终处置</h3>
+  <div style="color:#6e6e73;font-size:13px;margin-bottom:14px;">两个维度独立，组合起来决定每条运营提案的去向。</div>
+
+  <table style="width:100%;border-collapse:separate;border-spacing:0;font-size:13px;">
+    <tbody>
+      <tr>
+        <td style="padding:10px 12px;background:#f0fdf4;font-weight:600;color:#14532d;border-radius:8px;">E3 × 🌟 明星</td>
+        <td style="padding:10px 12px;color:#374151;">→ 最优先级，绿色通道，立即进组合器</td>
+      </tr>
+      <tr><td colspan="2" style="height:6px;"></td></tr>
+      <tr>
+        <td style="padding:10px 12px;background:#fef3c7;font-weight:600;color:#92400e;border-radius:8px;">E2 × ⭐ 潜力</td>
+        <td style="padding:10px 12px;color:#374151;">→ 进待审区，党总确认后启动小样</td>
+      </tr>
+      <tr><td colspan="2" style="height:6px;"></td></tr>
+      <tr>
+        <td style="padding:10px 12px;background:#dbeafe;font-weight:600;color:#1d4ed8;border-radius:8px;">E3 × 🌊 红海</td>
+        <td style="padding:10px 12px;color:#374151;">→ 证据齐但机会本身弱，退回运营动作（标题/投流）</td>
+      </tr>
+      <tr><td colspan="2" style="height:6px;"></td></tr>
+      <tr>
+        <td style="padding:10px 12px;background:#fee2e2;font-weight:600;color:#991b1b;border-radius:8px;">E1 × 🌟 明星</td>
+        <td style="padding:10px 12px;color:#374151;">→ 机会看着大但证据弱，强制补料到 E2</td>
+      </tr>
+      <tr><td colspan="2" style="height:6px;"></td></tr>
+      <tr>
+        <td style="padding:10px 12px;background:#f3f4f6;font-weight:600;color:#374151;border-radius:8px;">E0 × 任意象限</td>
+        <td style="padding:10px 12px;color:#374151;">→ 进猜想池，不消耗产品部产能</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 11. 技术架构 ============ -->
+<section class="section">
+  <div class="section-title"><span class="section-num">11</span>技术架构（极简）</div>
   <div class="section-sub">没有数据库、没有 K8s、没有运维。3 层组件，1 周出原型。</div>
   <div class="tech">
     <div class="tech-layer">
@@ -847,14 +965,14 @@
     <div class="tech-layer">
       <div class="tech-icon">📁</div>
       <div class="tech-name">Git 仓库（已有）</div>
-      <div class="tech-desc">07_modules.csv + 10_external_materials.csv + 08_pallet.csv + cards/*.json</div>
+      <div class="tech-desc">data/product_assets.csv + data/module_library_seed.csv + data/discovered_modules.csv + cards/*.json</div>
     </div>
   </div>
 </section>
 
-<!-- ============ 11. v1 / v1.5 / 永不 ============ -->
+<!-- ============ 12. v1 / v1.5 / 永不 ============ -->
 <section class="section">
-  <div class="section-title"><span class="section-num">11</span>路线图：v1 / v1.5 / 永远不做</div>
+  <div class="section-title"><span class="section-num">12</span>路线图：v1 / v1.5 / 永远不做</div>
   <div class="section-sub">边界清楚才能跑得快。</div>
   <div class="roadmap">
     <div class="road-card v1">
@@ -884,7 +1002,7 @@
     <div class="road-card never">
       <h4>✗ 永远不做</h4>
       <ul>
-        <li>开放给产品部以外的人</li>
+        <li>把组合器开放给所有部门直接使用</li>
         <li>对接外部合作伙伴</li>
         <li>项目管理 / 任务分发</li>
         <li>恢复立项审批 / 评分卡</li>
@@ -893,14 +1011,14 @@
     </div>
   </div>
   <div style="margin-top:16px;padding:14px 18px;background:#f0f7ff;border-radius:8px;font-size:13px;color:#1d4f8b;">
-    🔮 <strong>v2+ 远期</strong>：飞书消息卡片推送 / 货盘 SKU 自动解构 / 图片色卡可视化 / 多人协作 / 概念卡 → 立项打样流程
+    🔮 <strong>v2+ 远期</strong>：货盘 SKU 自动解构 / 图片色卡可视化 / 多人协作 / 概念卡 → 验证打样流程
   </div>
 </section>
 
-<!-- ============ 12. 下一步 ============ -->
+<!-- ============ 13. 下一步 ============ -->
 <section class="section" style="background:linear-gradient(135deg,#5856d6,#007aff);color:white;">
   <div class="section-title" style="color:white;">
-    <span class="section-num" style="background:white;color:#5856d6;">12</span>下一步：现在就能开始的 3 件事
+    <span class="section-num" style="background:white;color:#5856d6;">13</span>下一步：现在就能开始的 3 件事
   </div>
   <div class="section-sub" style="color:rgba(255,255,255,0.85);">汇报通过后第一周的具体动作。</div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:20px;">
