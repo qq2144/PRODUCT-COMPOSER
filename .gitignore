@@ -18,6 +18,13 @@ __pycache__/
 .venv/
 venv/
 
+# Node.js / TypeScript
+node_modules/
+dist/
+.svelte-kit/
+*.tsbuildinfo
+.pnpm-store/
+
 # 系统/编辑器
 .DS_Store
 Thumbs.db

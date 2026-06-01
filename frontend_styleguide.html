@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>产品组合器 · 前端样式规范 v1</title>
+<style>
+  :root {
+    /* ========== 主色系 ========== */
+    --primary: #5856d6;          /* 主紫 */
+    --primary-light: #ebeaff;
+    --primary-dark: #4a48b8;
+    --accent: #007aff;           /* 辅蓝 */
+    --gradient: linear-gradient(135deg, #5856d6, #007aff);
+
+    /* 语义色 */
+    --success: #16a34a;          /* 绿：可量产/已上架 */
+    --warning: #f59e0b;          /* 橙：警告/外层素材 */
+    --danger: #dc2626;           /* 红：未起量/禁用 */
+    --info: #0891b2;             /* 青：信息/竞品 */
+
+    /* 中性灰阶（参考苹果） */
+    --gray-50: #fafbfc;
+    --gray-100: #f5f5f7;
+    --gray-200: #ebebf0;
+    --gray-300: #d2d2d7;
+    --gray-400: #86868b;
+    --gray-500: #6e6e73;
+    --gray-700: #515154;
+    --gray-900: #1d1d1f;
+
+    /* ========== 字体 ========== */
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-mono: 'SF Mono', Menlo, Consolas, monospace;
+
+    --fs-h1: 28px;
+    --fs-h2: 22px;
+    --fs-h3: 18px;
+    --fs-h4: 15px;
+    --fs-body: 14px;
+    --fs-small: 12px;
+    --fs-tiny: 11px;
+
+    /* ========== 间距（4 的倍数） ========== */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+
+    /* ========== 圆角 ========== */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-pill: 100px;
+
+    /* ========== 阴影 ========== */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.10);
+
+    /* ========== 边框 ========== */
+    --border: 1px solid var(--gray-200);
+    --border-strong: 1px solid var(--gray-300);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    color: var(--gray-900);
+    background: var(--gray-100);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: var(--space-8) var(--space-6); }
+
+  /* Hero */
+  .hero {
+    background: var(--gradient); color: white;
+    border-radius: var(--radius-xl); padding: var(--space-8) var(--space-10);
+    margin-bottom: var(--space-6); box-shadow: var(--shadow-lg);
+  }
+  .hero h1 { font-size: var(--fs-h1); margin-bottom: var(--space-2); }
+  .hero p { opacity: 0.92; font-size: var(--fs-h4); max-width: 720px; }
+
+  /* Section */
+  .section {
+    background: white; border-radius: var(--radius-xl);
+    padding: var(--space-6) var(--space-8); margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-sm);
+  }
+  .section h2 {
+    font-size: var(--fs-h2); margin-bottom: var(--space-2);
+    display: flex; align-items: center; gap: var(--space-3);
+  }
+  .section h2 .num {
+    display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center;
+    background: var(--gradient); color: white; border-radius: 50%;
+    font-size: var(--fs-body); font-weight: 700;
+  }
+  .section .sub { color: var(--gray-500); font-size: var(--fs-small); margin-bottom: var(--space-5); }
+
+  /* ========== 颜色卡 ========== */
+  .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-3); }
+  .color-card {
+    border-radius: var(--radius-md); overflow: hidden;
+    border: var(--border); font-size: var(--fs-tiny);
+  }
+  .color-card .swatch { height: 56px; }
+  .color-card .meta { padding: var(--space-2) var(--space-3); }
+  .color-card .meta .name { font-weight: 600; }
+  .color-card .meta .hex { color: var(--gray-500); font-family: var(--font-mono); }
+
+  /* ========== 字体层级展示 ========== */
+  .type-row {
+    display: grid; grid-template-columns: 80px 60px 1fr;
+    gap: var(--space-4); align-items: baseline;
+    padding: var(--space-3) 0; border-bottom: 1px dashed var(--gray-200);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-row .label { font-size: var(--fs-tiny); color: var(--gray-500); }
+  .type-row .size { font-family: var(--font-mono); font-size: var(--fs-tiny); color: var(--gray-500); }
+
+  /* ========== 间距/圆角/阴影展示 ========== */
+  .tokens-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+  .token-card {
+    background: var(--gray-50); border-radius: var(--radius-md);
+    padding: var(--space-4); text-align: center;
+  }
+  .token-card .demo {
+    background: var(--primary-light); margin: 0 auto var(--space-3);
+  }
+  .token-card .name { font-weight: 600; font-size: var(--fs-small); }
+  .token-card .val { color: var(--gray-500); font-family: var(--font-mono); font-size: var(--fs-tiny); }
+
+  /* ========== Button ========== */
+  .btn-grid { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4); }
+  .btn {
+    padding: 8px 16px; border-radius: var(--radius-md); border: none;
+    font-size: var(--fs-body); font-weight: 500; cursor: pointer;
+    transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--gradient); color: white; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .btn-secondary { background: var(--gray-100); color: var(--gray-900); }
+  .btn-secondary:hover { background: var(--gray-200); }
+  .btn-ghost { background: transparent; color: var(--primary); }
+  .btn-ghost:hover { background: var(--primary-light); }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-sm { padding: 4px 10px; font-size: var(--fs-small); }
+  .btn-lg { padding: 12px 24px; font-size: var(--fs-h4); }
+
+  /* ========== Pills / Tags ========== */
+  .pill {
+    display: inline-block; padding: 2px 8px;
+    border-radius: var(--radius-pill); font-size: var(--fs-tiny); font-weight: 500;
+  }
+  .pill-default { background: var(--gray-200); color: var(--gray-700); }
+  .pill-primary { background: var(--primary-light); color: var(--primary); }
+  .pill-success { background: #d1f4d1; color: #14532d; }
+  .pill-warning { background: #ffe5b0; color: #92400e; }
+  .pill-danger { background: #fee2e2; color: #991b1b; }
+  .pill-info { background: #e0f2fe; color: #0c4a6e; }
+
+  /* ========== Card ========== */
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+  .card {
+    background: white; border: var(--border); border-radius: var(--radius-lg);
+    padding: var(--space-5); transition: all 0.15s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .card h3 { font-size: var(--fs-h3); margin-bottom: var(--space-2); }
+  .card p { color: var(--gray-500); font-size: var(--fs-small); }
+  .card-stat .num {
+    font-size: var(--fs-h1); font-weight: 700; color: var(--primary);
+    font-family: var(--font-mono);
+  }
+  .card-stat .label { font-size: var(--fs-tiny); color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin-top: var(--space-1); }
+
+  /* ========== Input ========== */
+  .input {
+    width: 100%; padding: 8px 12px; border: var(--border-strong);
+    border-radius: var(--radius-md); font-size: var(--fs-body);
+    font-family: var(--font-sans); outline: none; transition: all 0.15s;
+  }
+  .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(88,86,214,0.15); }
+
+  .form-row { display: flex; gap: var(--space-3); margin-bottom: var(--space-3); flex-wrap: wrap; align-items: center; }
+  .form-row label { font-size: var(--fs-small); color: var(--gray-500); min-width: 60px; }
+
+  /* ========== Table ========== */
+  .table-wrap { overflow: auto; border-radius: var(--radius-md); border: var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); }
+  thead th {
+    background: var(--gray-100); padding: 10px 14px; text-align: left;
+    font-weight: 600; color: var(--gray-700); border-bottom: 2px solid var(--gray-300);
+    position: sticky; top: 0;
+  }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); }
+  tbody tr:hover td { background: var(--gray-50); }
+  td.num, th.num { font-family: var(--font-mono); text-align: right; }
+
+  /* ========== Tab ========== */
+  .tabs { display: flex; gap: var(--space-2); margin-bottom: var(--space-4); }
+  .tab {
+    padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer;
+    font-weight: 500; background: white; border: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab:hover { background: var(--gray-100); }
+  .tab.active { border-color: var(--primary); color: var(--primary); }
+
+  /* ========== Modal mockup ========== */
+  .modal-mockup {
+    background: var(--gray-50); border-radius: var(--radius-lg);
+    padding: var(--space-6); position: relative;
+  }
+  .modal-card {
+    background: white; border-radius: var(--radius-lg); padding: var(--space-5);
+    box-shadow: var(--shadow-lg); max-width: 480px; margin: 0 auto;
+  }
+  .modal-card h3 { font-size: var(--fs-h3); margin-bottom: var(--space-3); }
+  .modal-card .footer { display: flex; gap: var(--space-2); justify-content: flex-end; margin-top: var(--space-4); }
+
+  /* ========== Page mockup ========== */
+  .page-mockup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+  .page-mock {
+    background: var(--gray-50); border-radius: var(--radius-lg);
+    padding: var(--space-4); border: var(--border);
+  }
+  .page-mock .pm-header { font-weight: 600; margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+  .page-mock .pm-box {
+    background: white; border-radius: var(--radius-md); padding: var(--space-3);
+    margin-bottom: var(--space-2); font-size: var(--fs-tiny); color: var(--gray-500);
+  }
+  .page-mock .pm-box.colored { background: var(--primary-light); color: var(--primary); }
+
+  /* ========== Tech stack box ========== */
+  .stack-box {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border-radius: var(--radius-lg); padding: var(--space-5);
+    border-left: 4px solid var(--info);
+  }
+  .stack-box h3 { color: var(--info); margin-bottom: var(--space-3); }
+  .stack-box ul { list-style: none; }
+  .stack-box li { padding: 4px 0 4px 20px; position: relative; font-size: var(--fs-small); }
+  .stack-box li::before { content: "▸"; position: absolute; left: 0; color: var(--info); font-weight: bold; }
+  .stack-box code {
+    background: white; padding: 1px 6px; border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: var(--fs-tiny); color: var(--primary);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🎨 产品组合器 · 前端样式规范 v1</h1>
+  <p>Vue 3 + TypeScript + Vite + Naive UI 项目的视觉基线。沿用 <code style="background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:4px;">web/index.html</code> 的苹果风，本文档把所有令牌（颜色/字号/间距）规范化，作为后续开发的视觉标准。</p>
+</div>
+
+<!-- 1. 技术栈最终敲定 -->
+<div class="section">
+  <h2><span class="num">1</span>技术栈最终敲定</h2>
+  <div class="sub">前后端 TypeScript，类型贯通，单一语言学习成本。</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+    <div class="stack-box">
+      <h3>🖥️ 前端</h3>
+      <ul>
+        <li><code>Vue 3</code> + <code>TypeScript</code> Composition API</li>
+        <li><code>Vite</code> 5 构建（极速）</li>
+        <li><code>Naive UI</code> 组件库（TS first，文档优秀，主题切换）</li>
+        <li><code>Pinia</code> 状态管理</li>
+        <li><code>Vue Router</code> 路由</li>
+        <li><code>axios</code> HTTP 客户端</li>
+        <li><code>pnpm</code> 包管理（更快更省）</li>
+      </ul>
+    </div>
+    <div class="stack-box">
+      <h3>⚙️ 后端</h3>
+      <ul>
+        <li><code>Fastify</code> + <code>TypeScript</code></li>
+        <li><code>tsx</code> 开发热重载</li>
+        <li><code>papaparse</code> 读 CSV</li>
+        <li><code>better-sqlite3</code> 概念卡存储（同步 API）</li>
+        <li><code>zod</code> 请求/响应 schema 校验</li>
+        <li><code>pino</code> 日志</li>
+        <li>调 <code>openclaw</code> 走 native <code>fetch</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 主色系 -->
+<div class="section">
+  <h2><span class="num">2</span>主色系</h2>
+  <div class="sub">紫蓝渐变作主色（沿用现有 demo），辅以语义色：绿/橙/红/青。</div>
+
+  <div class="color-grid">
+    <div class="color-card"><div class="swatch" style="background: var(--primary);"></div><div class="meta"><div class="name">--primary</div><div class="hex">#5856d6</div></div></div>
+    <div class="color-card"><div class="swatch" style="background: var(--accent);"></div><div class="meta"><div class="name">--accent</div><div class="hex">#007aff</div></div></div>
+    <div class="color-card"><div class="swatch" style="background: var(--success);"></div><div class="meta"><div class="name">--success</div><div class="hex">#16a34a</div></div></div>
+    <div class="color-card"><div class="swatch" style="background: var(--warning);"></div><div class="meta"><div class="name">--warning</div><div class="hex">#f59e0b</div></div></div>
+    <div class="color-card"><div class="swatch" style="background: var(--danger);"></div><div class="meta"><div class="name">--danger</div><div class="hex">#dc2626</div></div></div>
+    <div class="color-card"><div class="swatch" style="background: var(--info);"></div><div class="meta"><div class="name">--info</div><div class="hex">#0891b2</div></div></div>
+  </div>
+
+  <div style="margin-top: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--gray-50); border-radius: var(--radius-md); font-size: var(--fs-small); color: var(--gray-700);">
+    <strong>语义映射：</strong>
+    <span class="pill pill-success">绿</span> 已量产 / 已起量 / E3绿色通道&nbsp;&nbsp;
+    <span class="pill pill-warning">橙</span> 外层素材 / 待补料 / E2待审&nbsp;&nbsp;
+    <span class="pill pill-danger">红</span> 未起量 / 已禁用 / 缺口&nbsp;&nbsp;
+    <span class="pill pill-info">青</span> 竞品参考 / E1单一证据
+  </div>
+</div>
+
+<!-- 3. 字体 -->
+<div class="section">
+  <h2><span class="num">3</span>字体层级</h2>
+  <div class="sub">系统字体（无外链），中文 PingFang/微软雅黑，等宽用 SF Mono。</div>
+
+  <div class="type-row"><div class="label">H1</div><div class="size">28px</div><div style="font-size: 28px; font-weight: 700;">产品查询中心</div></div>
+  <div class="type-row"><div class="label">H2</div><div class="size">22px</div><div style="font-size: 22px; font-weight: 600;">5 维度解析</div></div>
+  <div class="type-row"><div class="label">H3</div><div class="size">18px</div><div style="font-size: 18px; font-weight: 600;">模块匹配列表</div></div>
+  <div class="type-row"><div class="label">H4</div><div class="size">15px</div><div style="font-size: 15px; font-weight: 600;">来源贡献榜</div></div>
+  <div class="type-row"><div class="label">Body</div><div class="size">14px</div><div>正文常规 — 大段说明、表格内容、表单 label</div></div>
+  <div class="type-row"><div class="label">Small</div><div class="size">12px</div><div style="font-size: 12px;">辅助说明、表格 caption、过滤器 label</div></div>
+  <div class="type-row"><div class="label">Tiny</div><div class="size">11px</div><div style="font-size: 11px; color: var(--gray-500);">UPPERCASE / META INFO</div></div>
+  <div class="type-row"><div class="label">Mono</div><div class="size">13px</div><div style="font-family: var(--font-mono); font-size: 13px;">HW63 · 02.06.03 · PANTONE 2925C</div></div>
+</div>
+
+<!-- 4. 间距 / 圆角 / 阴影 -->
+<div class="section">
+  <h2><span class="num">4</span>间距 · 圆角 · 阴影</h2>
+  <div class="sub">间距 4 的倍数；圆角 sm/md/lg/xl 四档；阴影 sm/md/lg 三档。</div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-4) 0 var(--space-3);">间距 token（4px 基准）</h3>
+  <div class="tokens-grid">
+    <div class="token-card"><div class="demo" style="width: 4px; height: 4px;"></div><div class="name">space-1</div><div class="val">4px</div></div>
+    <div class="token-card"><div class="demo" style="width: 8px; height: 8px;"></div><div class="name">space-2</div><div class="val">8px</div></div>
+    <div class="token-card"><div class="demo" style="width: 16px; height: 16px;"></div><div class="name">space-4</div><div class="val">16px</div></div>
+    <div class="token-card"><div class="demo" style="width: 32px; height: 32px;"></div><div class="name">space-8</div><div class="val">32px</div></div>
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-5) 0 var(--space-3);">圆角 token</h3>
+  <div class="tokens-grid">
+    <div class="token-card"><div class="demo" style="width: 60px; height: 40px; border-radius: 6px;"></div><div class="name">radius-sm</div><div class="val">6px</div></div>
+    <div class="token-card"><div class="demo" style="width: 60px; height: 40px; border-radius: 10px;"></div><div class="name">radius-md</div><div class="val">10px</div></div>
+    <div class="token-card"><div class="demo" style="width: 60px; height: 40px; border-radius: 14px;"></div><div class="name">radius-lg</div><div class="val">14px</div></div>
+    <div class="token-card"><div class="demo" style="width: 60px; height: 40px; border-radius: 20px;"></div><div class="name">radius-xl</div><div class="val">20px</div></div>
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-5) 0 var(--space-3);">阴影 token</h3>
+  <div class="tokens-grid">
+    <div class="token-card" style="background: white; box-shadow: var(--shadow-sm);"><div style="height: 30px;"></div><div class="name">shadow-sm</div><div class="val">卡片基础</div></div>
+    <div class="token-card" style="background: white; box-shadow: var(--shadow-md);"><div style="height: 30px;"></div><div class="name">shadow-md</div><div class="val">hover 弹起</div></div>
+    <div class="token-card" style="background: white; box-shadow: var(--shadow-lg);"><div style="height: 30px;"></div><div class="name">shadow-lg</div><div class="val">Modal/Hero</div></div>
+  </div>
+</div>
+
+<!-- 5. 按钮 -->
+<div class="section">
+  <h2><span class="num">5</span>按钮</h2>
+  <div class="sub">主按钮用渐变 + 阴影 hover；次按钮灰底；ghost 用主色文字。</div>
+
+  <h3 style="font-size: var(--fs-h4); margin-bottom: var(--space-3);">规格</h3>
+  <div class="btn-grid">
+    <button class="btn btn-primary btn-sm">小号 +</button>
+    <button class="btn btn-primary">默认 +</button>
+    <button class="btn btn-primary btn-lg">大号 +</button>
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-4) 0 var(--space-3);">类型</h3>
+  <div class="btn-grid">
+    <button class="btn btn-primary">主按钮</button>
+    <button class="btn btn-secondary">次按钮</button>
+    <button class="btn btn-ghost">幽灵按钮</button>
+    <button class="btn btn-danger">危险</button>
+    <button class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">禁用</button>
+  </div>
+</div>
+
+<!-- 6. Pills / Tags -->
+<div class="section">
+  <h2><span class="num">6</span>标签（Pills）</h2>
+  <div class="sub">所有"分类、状态、品牌"全用 pill 风格。文字与背景对比柔和。</div>
+
+  <div class="btn-grid">
+    <span class="pill pill-default">默认</span>
+    <span class="pill pill-primary">主色</span>
+    <span class="pill pill-success">绿（已量产）</span>
+    <span class="pill pill-warning">橙（外层素材）</span>
+    <span class="pill pill-danger">红（未起量）</span>
+    <span class="pill pill-info">青（竞品）</span>
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-4) 0 var(--space-3);">实际场景</h3>
+  <div class="btn-grid" style="margin-bottom: 0;">
+    <span class="pill pill-primary">品牌 SERUNA</span>
+    <span class="pill pill-info">品类 护膝</span>
+    <span class="pill pill-success">已量产</span>
+    <span class="pill pill-danger">未起量</span>
+    <span class="pill pill-warning">⚠️ 待打样</span>
+    <span class="pill pill-info">🌊 红海场景</span>
+    <span class="pill pill-success">🌟 明星场景</span>
+    <span class="pill pill-default">E0 猜想</span>
+  </div>
+</div>
+
+<!-- 7. 卡片 -->
+<div class="section">
+  <h2><span class="num">7</span>卡片</h2>
+  <div class="sub">三种用途：通用 / 统计指标 / 模块详情。</div>
+
+  <h3 style="font-size: var(--fs-h4); margin-bottom: var(--space-3);">通用 + 统计</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h3>组合器</h3>
+      <p>自然语言输入产品想法，AI 拼出模块组合。</p>
+    </div>
+    <div class="card card-stat">
+      <div class="num">4,620</div>
+      <div class="label">TOTAL SKUs</div>
+    </div>
+    <div class="card card-stat">
+      <div class="num">63.4%</div>
+      <div class="label">JOIN 命中率</div>
+    </div>
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-5) 0 var(--space-3);">模块详情卡（实际场景）</h3>
+  <div class="card" style="max-width: 600px;">
+    <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+      <span class="pill pill-info">面料模块</span>
+      <span style="font-family: var(--font-mono); color: var(--gray-500);">02.06.03</span>
+      <span style="margin-left: auto; font-size: var(--fs-tiny); color: var(--gray-500);">工厂：博凯</span>
+    </div>
+    <h3 style="margin-bottom: var(--space-2);">冰感小雨点 165cm 160g 蓝色</h3>
+    <p>被 <strong style="color: var(--primary);">19 个 SKU 规格</strong> 复用 · 累计销量 <strong style="color: var(--success);">31,329</strong></p>
+    <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3);">
+      <button class="btn btn-primary btn-sm">查看用在哪些 SKU →</button>
+      <button class="btn btn-ghost btn-sm">复制到新概念卡</button>
+    </div>
+  </div>
+</div>
+
+<!-- 8. 输入框 + 筛选条 -->
+<div class="section">
+  <h2><span class="num">8</span>输入与筛选条</h2>
+  <div class="sub">下拉/输入框/搜索都使用同一规范。聚焦时主色边框 + 柔和外光晕。</div>
+
+  <h3 style="font-size: var(--fs-h4); margin-bottom: var(--space-3);">单个输入</h3>
+  <div style="max-width: 400px;">
+    <input class="input" placeholder="搜货号 / 货品名 / 规格...">
+  </div>
+
+  <h3 style="font-size: var(--fs-h4); margin: var(--space-5) 0 var(--space-3);">实际筛选条</h3>
+  <div style="background: white; padding: var(--space-4); border-radius: var(--radius-lg); border: var(--border);">
+    <div class="form-row" style="margin-bottom: 0;">
+      <label>品牌：</label>
+      <select class="input" style="width: 140px;"><option>全部</option><option>TMT</option><option>SERUNA</option></select>
+      <label>品类：</label>
+      <select class="input" style="width: 140px;"><option>全部</option><option>护腕</option><option>护膝</option></select>
+      <label>销量 ≥</label>
+      <input class="input" type="number" placeholder="0" style="width: 90px;">
+      <input class="input" type="text" placeholder="🔍 搜索..." style="flex: 1; min-width: 200px;">
+      <button class="btn btn-ghost btn-sm">清空</button>
+    </div>
+  </div>
+</div>
+
+<!-- 9. 表格 -->
+<div class="section">
+  <h2><span class="num">9</span>表格</h2>
+  <div class="sub">sticky header / hover 高亮 / 数字右对齐 + 等宽 / Pill 当列展示分类。</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>品牌</th><th>品类</th><th>货号</th><th>名称</th><th>规格</th><th class="num">销量</th><th class="num">零售价</th><th class="num">毛利%</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="pill pill-primary">SERUNA</span></td><td><span class="pill pill-info">护膝</span></td><td><code style="font-family: var(--font-mono);">HX61</code></td><td>护膝 V1</td><td>L</td><td class="num" style="color: var(--success); font-weight: 700;">6922</td><td class="num">¥138</td><td class="num">58.2%</td></tr>
+        <tr><td><span class="pill pill-primary">TMT</span></td><td><span class="pill pill-info">手套</span></td><td><code style="font-family: var(--font-mono);">W68</code></td><td>W68 手套</td><td>粉灰M</td><td class="num">1</td><td class="num">¥60</td><td class="num">67.3%</td></tr>
+        <tr><td><span class="pill pill-primary">TMT</span></td><td><span class="pill pill-info">护踝</span></td><td><code style="font-family: var(--font-mono);">H70</code></td><td>H70 护踝</td><td>XL</td><td class="num" style="color: var(--danger);">0</td><td class="num">¥200</td><td class="num">91.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 10. Tabs -->
+<div class="section">
+  <h2><span class="num">10</span>Tab 切换</h2>
+  <div class="sub">主导航 + Tab 视图切换。选中态：主色边框 + 主色文字。</div>
+
+  <div class="tabs">
+    <div class="tab active">📦 按品类</div>
+    <div class="tab">🏷️ 按品牌</div>
+    <div class="tab">🧩 按模块</div>
+    <div class="tab">⚠️ 未起量</div>
+  </div>
+</div>
+
+<!-- 11. Modal mockup -->
+<div class="section">
+  <h2><span class="num">11</span>Modal 弹窗</h2>
+  <div class="sub">居中显示，圆角 lg，shadow-lg；标题 + 内容 + 右下角操作按钮。</div>
+
+  <div class="modal-mockup">
+    <div class="modal-card">
+      <h3>保存为产品概念卡</h3>
+      <p style="color: var(--gray-500); font-size: var(--fs-small); margin-bottom: var(--space-3);">
+        请确认模块清单后保存。系统会自动写入作者标签和创建时间。
+      </p>
+      <div style="margin-bottom: var(--space-3);">
+        <label style="font-size: var(--fs-small); color: var(--gray-500);">概念卡名称</label>
+        <input class="input" value="Seruna 户外快拆护膝 V1" style="margin-top: 4px;">
+      </div>
+      <div class="footer">
+        <button class="btn btn-ghost">取消</button>
+        <button class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 12. 页面布局缩略 -->
+<div class="section">
+  <h2><span class="num">12</span>v1 关键页面布局（低保真）</h2>
+  <div class="sub">v1 必做 5 个页面。下面是每个页面的核心结构示意。</div>
+
+  <div class="page-mockup-grid">
+    <div class="page-mock">
+      <div class="pm-header">🏠 Cockpit · 驾驶舱</div>
+      <div class="pm-box colored">顶部 Hero · 总览数字 4 张卡片</div>
+      <div class="pm-box">⚠️ 未起量警告 5 条</div>
+      <div class="pm-box">🏆 本月新增模块 TOP 3</div>
+      <div class="pm-box">🗺️ 缺口品类前 5</div>
+    </div>
+
+    <div class="page-mock">
+      <div class="pm-header">✨ Compose · 组合器</div>
+      <div class="pm-box colored">自然语言输入框（大）</div>
+      <div class="pm-box">5 维度 chips（可编辑）</div>
+      <div class="pm-box">内层模块匹配（4-6 条）</div>
+      <div class="pm-box">💡 外层素材自由畅想（2-3 条）</div>
+      <div class="pm-box">📊 自动对照分析（4 象限定位）</div>
+      <div class="pm-box">生成概念卡 →</div>
+    </div>
+
+    <div class="page-mock">
+      <div class="pm-header">🔍 Query · 查询中心</div>
+      <div class="pm-box colored">4 Tab：品类 / 品牌 / 模块 / 未起量</div>
+      <div class="pm-box">顶部多维筛选条</div>
+      <div class="pm-box">左侧分组列表 + 右侧表格</div>
+    </div>
+
+    <div class="page-mock">
+      <div class="pm-header">🗺️ CategoryMap · 品类地图</div>
+      <div class="pm-box colored">品牌 × 品类矩阵（7 品类 × 9 品牌）</div>
+      <div class="pm-box">绿✅ / 黄🟡 / 红❌ 三色</div>
+      <div class="pm-box">点红格 → 自动创建品牌迁移草案</div>
+    </div>
+
+    <div class="page-mock">
+      <div class="pm-header">📋 Concepts · 概念卡列表</div>
+      <div class="pm-box colored">概念卡卡片网格</div>
+      <div class="pm-box">按作者/时间/状态筛</div>
+      <div class="pm-box">点卡查看详情 + 编辑</div>
+    </div>
+
+    <div class="page-mock" style="opacity: 0.5;">
+      <div class="pm-header">🚪 OpsGate · 运营入口（v1.5）</div>
+      <div class="pm-box">证据 E0-E3 闸口</div>
+      <div class="pm-box">4 种结果：通过/补/退回/合并</div>
+      <div class="pm-box" style="color: var(--warning);">v1 内测不需要，缓做</div>
+    </div>
+  </div>
+</div>
+
+<!-- 13. 最终对齐 -->
+<div class="section" style="background: var(--primary); color: white;">
+  <h2 style="color: white;"><span class="num" style="background: white; color: var(--primary);">13</span>等你点头</h2>
+  <div class="sub" style="color: rgba(255,255,255,0.85);">点头我就起脚手架进 M1。</div>
+
+  <div style="background: rgba(255,255,255,0.15); padding: var(--space-4); border-radius: var(--radius-md); margin-top: var(--space-3); font-size: var(--fs-body); line-height: 2;">
+    ✅ 颜色系：紫蓝主 + 4 语义辅 — <strong>OK 吗</strong><br>
+    ✅ 字体：系统字体 + SF Mono — <strong>OK 吗</strong><br>
+    ✅ 圆角：sm/md/lg/xl 四档（大量 md 和 lg）— <strong>OK 吗</strong><br>
+    ✅ Pill 风格分类标签 — <strong>OK 吗</strong><br>
+    ✅ Naive UI 作为组件库 — <strong>OK 吗</strong><br>
+    ✅ Vue 3 + TS + Vite / Fastify + TS — <strong>OK 吗</strong>
+  </div>
+
+  <div style="margin-top: var(--space-4); padding: var(--space-3) var(--space-4); background: rgba(255,255,255,0.1); border-radius: var(--radius-md); font-size: var(--fs-small);">
+    点头说"开"，我立即：<br>
+    ① 起 <code style="background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px;">backend/</code> + <code style="background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px;">frontend/</code> 脚手架<br>
+    ② 装依赖（pnpm install）<br>
+    ③ 写 <code style="background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px;">GET /api/products</code> 第一个真实可跑接口<br>
+    ④ Vue 端调通，渲染前 50 个 SKU<br>
+    ⑤ commit 第一个里程碑 M1
+  </div>
+</div>
+
+</div>
+</body>
+</html>

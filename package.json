@@ -1,0 +1,16 @@
+{
+  "name": "product-composer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "淘玛特产品组合器 - monorepo 根",
+  "scripts": {
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
