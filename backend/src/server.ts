@@ -9,6 +9,7 @@ import { overviewRoute } from './routes/overview.js';
 import { productsRoute } from './routes/products.js';
 import { modulesRoute } from './routes/modules.js';
 import { composeRoute } from './routes/compose.js';
+import { insightsRoute } from './routes/insights.js';
 
 const app = Fastify({
   logger: {
@@ -40,15 +41,18 @@ async function bootstrap() {
   await app.register(productsRoute);
   await app.register(modulesRoute);
   await app.register(composeRoute);
+  await app.register(insightsRoute);
 
   // 启动
   await app.listen({ port: config.port, host: config.host });
   app.log.info(`🚀 后端已启动: http://${config.host}:${config.port}`);
-  app.log.info(`   GET  /api/health    健康检查`);
-  app.log.info(`   GET  /api/overview  总览数据（驾驶舱）`);
-  app.log.info(`   GET  /api/products  SKU 查询`);
-  app.log.info(`   GET  /api/modules   模块查询`);
-  app.log.info(`   POST /api/compose   组合器 ⭐ M3 核心`);
+  app.log.info(`   GET  /api/health        健康检查`);
+  app.log.info(`   GET  /api/overview      总览数据`);
+  app.log.info(`   GET  /api/products      SKU 查询`);
+  app.log.info(`   GET  /api/modules       模块查询`);
+  app.log.info(`   POST /api/compose       组合器`);
+  app.log.info(`   GET  /api/category-map  品类地图 ⭐ M4`);
+  app.log.info(`   GET  /api/underperform  未起量诊断 ⭐ M4`);
 }
 
 bootstrap().catch((err) => {

@@ -3,6 +3,8 @@
   import Cockpit from './routes/Cockpit.svelte';
   import Query from './routes/Query.svelte';
   import Compose from './routes/Compose.svelte';
+  import CategoryMap from './routes/CategoryMap.svelte';
+  import Underperform from './routes/Underperform.svelte';
 
   // svelte-routing 顶层 url（用于服务端渲染时传入，浏览器端可留空）
   let { url = '' } = $props();
@@ -19,6 +21,8 @@
       <nav class="nav">
         <Link to="/" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>🏠 驾驶舱</Link>
         <Link to="/compose" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>✨ 组合器</Link>
+        <Link to="/category-map" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>🗺️ 品类地图</Link>
+        <Link to="/underperform" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>⚠️ 未起量</Link>
         <Link to="/query" getProps={({ isCurrent }) => ({ class: isCurrent ? 'nav-link active' : 'nav-link' })}>🔍 查询中心</Link>
       </nav>
     </div>
@@ -27,6 +31,8 @@
   <main class="app-main">
     <Route path="/"><Cockpit /></Route>
     <Route path="/compose"><Compose /></Route>
+    <Route path="/category-map"><CategoryMap /></Route>
+    <Route path="/underperform"><Underperform /></Route>
     <Route path="/query"><Query /></Route>
   </main>
 </Router>

@@ -2,7 +2,17 @@
  * axios 客户端 - 与后端通信
  */
 import axios from 'axios';
-import type { Overview, PageResult, ProductAsset, ProductsQuery, Module, ComposeResult } from './types';
+import type {
+  Overview,
+  PageResult,
+  ProductAsset,
+  ProductsQuery,
+  Module,
+  ComposeResult,
+  CategoryMapResult,
+  UnderperformList,
+  SkuDiagnosis,
+} from './types';
 
 const http = axios.create({
   baseURL: '/api',
@@ -42,4 +52,13 @@ export const api = {
 
   compose: (text: string) =>
     http.post<ComposeResult>('/compose', { text }).then((r) => r.data),
+
+  categoryMap: (minCategorySize?: number) =>
+    http.get<CategoryMapResult>('/category-map', { params: { minCategorySize } }).then((r) => r.data),
+
+  underperform: (q: { category?: string; brand?: string; salesMax?: number; limit?: number; offset?: number } = {}) =>
+    http.get<UnderperformList>('/underperform', { params: q }).then((r) => r.data),
+
+  diagnoseSku: (productAbbrev: string) =>
+    http.get<SkuDiagnosis>(`/underperform/${encodeURIComponent(productAbbrev)}`).then((r) => r.data),
 };

@@ -118,3 +118,69 @@ export interface ComposeResult {
   assetComparison: AssetComparison;
   conceptCardDraft: ConceptCardDraft;
 }
+
+// ============ 品类地图 (M4) ============
+export interface MatrixCell {
+  brand: string;
+  category: string;
+  skuRowCount: number;
+  totalSales: number;
+  isGap: boolean;
+}
+
+export interface CategoryMapResult {
+  brands: string[];
+  categories: string[];
+  matrix: MatrixCell[][];
+  brandCategoryTotals: Record<string, number>;
+  categorySkuTotals: Record<string, number>;
+  gapsCount: number;
+  filledCount: number;
+}
+
+// ============ 未起量诊断 (M4) ============
+export interface UnderperformItem {
+  productAbbrev: string;
+  name: string;
+  brand: string;
+  category: string;
+  shop: string;
+  spec: string;
+  sales: number;
+  price: number;
+  margin: number;
+  categoryPercentile: number;
+}
+
+export interface UnderperformList {
+  total: number;
+  items: UnderperformItem[];
+}
+
+export interface SkuDiagnosis {
+  target: {
+    productAbbrev: string;
+    name: string;
+    brand: string;
+    category: string;
+    totalSales: number;
+    specs: Array<{ spec: string; shop: string; sales: number; price: number; margin: number }>;
+  };
+  categoryStats: {
+    skuCount: number;
+    salesDistribution: { p25: number; p50: number; p75: number; p90: number; max: number };
+    priceDistribution: { p25: number; p50: number; p75: number; avg: number };
+    targetVsMedian: {
+      salesGap: number;
+      pricePosition: 'above' | 'below' | 'equal';
+      priceGapPct: number;
+    };
+  };
+  benchmarks: Array<{
+    productAbbrev: string;
+    name: string;
+    brand: string;
+    totalSales: number;
+    avgPrice: number;
+  }>;
+}

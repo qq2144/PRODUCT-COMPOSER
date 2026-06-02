@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { api } from '../lib/api';
   import type { ComposeResult, QuadrantLabel } from '../lib/types';
 
@@ -6,6 +7,16 @@
   let result = $state<ComposeResult | null>(null);
   let loading = $state(false);
   let error = $state<string | null>(null);
+
+  // 从 URL query 读 text（CategoryMap 红格跳过来时会带）
+  onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    const initText = params.get('text');
+    if (initText) {
+      text = initText;
+      submit();
+    }
+  });
 
   /** 用户自选的 4 象限标签 - 系统不评判，仅展示客观数据，用户基于事实判断 */
   let userQuadrant = $state<QuadrantLabel>('');
