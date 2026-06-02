@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
   import { api } from '../lib/api';
   import type { ComposeResult, QuadrantLabel } from '../lib/types';
 
@@ -7,6 +8,12 @@
   let result = $state<ComposeResult | null>(null);
   let loading = $state(false);
   let error = $state<string | null>(null);
+
+  // M5：保存概念卡相关状态
+  let author = $state(localStorage.getItem('composer.author') ?? '内部用户');
+  let saving = $state(false);
+  let savedId = $state<string | null>(null);
+  let saveError = $state<string | null>(null);
 
   // 从 URL query 读 text（CategoryMap 红格跳过来时会带）
   onMount(() => {
@@ -40,12 +47,43 @@
     error = null;
     result = null;
     userQuadrant = '';
+    savedId = null;
+    saveError = null;
     try {
       result = await api.compose(text);
     } catch (e) {
       error = e instanceof Error ? e.message : String(e);
     } finally {
       loading = false;
+    }
+  }
+
+  async function saveCard() {
+    if (!result) return;
+    saving = true;
+    saveError = null;
+    try {
+      const cleanAuthor = author.trim() || '内部用户';
+      localStorage.setItem('composer.author', cleanAuthor);
+      const saved = await api.saveCard({
+        name: result.conceptCardDraft.name,
+        summary: result.conceptCardDraft.summary,
+        rawText: text,
+        userQuadrant,
+        author: cleanAuthor,
+        payload: {
+          parsedIntent: result.parsedIntent,
+          matchedModules: result.matchedModules,
+          totalMatchedModules: result.totalMatchedModules,
+          assetComparison: result.assetComparison,
+          conceptCardDraft: result.conceptCardDraft,
+        },
+      });
+      savedId = saved.id;
+    } catch (e) {
+      saveError = e instanceof Error ? e.message : String(e);
+    } finally {
+      saving = false;
     }
   }
 
@@ -273,9 +311,29 @@
       {/if}
 
       <div class="concept-actions">
-        <button class="btn btn-primary" disabled>💾 保存概念卡（M5 实现）</button>
-        <button class="btn btn-ghost" onclick={() => { result = null; text = ''; }}>↺ 重新输入</button>
+        {#if !savedId}
+          <label class="author-input">
+            <span class="author-label">作者</span>
+            <input
+              type="text"
+              bind:value={author}
+              placeholder="内部用户"
+              disabled={saving}
+              maxlength="60"
+            />
+          </label>
+          <button class="btn btn-primary" onclick={saveCard} disabled={saving}>
+            {saving ? '保存中...' : '💾 保存概念卡'}
+          </button>
+        {:else}
+          <span class="saved-tag">✓ 已保存（{savedId}）</span>
+          <Link to="/concepts" class="btn btn-primary">查看所有概念卡 →</Link>
+        {/if}
+        <button class="btn btn-ghost" onclick={() => { result = null; text = ''; savedId = null; }}>↺ 重新输入</button>
       </div>
+      {#if saveError}
+        <div class="save-error">❌ 保存失败：{saveError}</div>
+      {/if}
     </div>
   {/if}
 </div>
@@ -632,6 +690,53 @@
   .concept-actions {
     display: flex;
     gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .author-input {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gray-50);
+    padding: 4px 10px 4px 6px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+  }
+  .author-label {
+    color: var(--gray-500);
+    font-size: 11px;
+    padding-left: 4px;
+  }
+  .author-input input {
+    border: none;
+    background: white;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 13px;
+    width: 140px;
+    outline: none;
+  }
+  .saved-tag {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-family: var(--font-mono);
+  }
+  :global(.concept-actions a.btn) {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .save-error {
+    margin-top: 10px;
+    color: var(--danger);
+    font-size: 13px;
+    background: #fee2e2;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
   }
 
   .muted.small {

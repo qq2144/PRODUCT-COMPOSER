@@ -10,6 +10,7 @@ import { productsRoute } from './routes/products.js';
 import { modulesRoute } from './routes/modules.js';
 import { composeRoute } from './routes/compose.js';
 import { insightsRoute } from './routes/insights.js';
+import { cardsRoute } from './routes/cards.js';
 
 const app = Fastify({
   logger: {
@@ -42,6 +43,7 @@ async function bootstrap() {
   await app.register(modulesRoute);
   await app.register(composeRoute);
   await app.register(insightsRoute);
+  await app.register(cardsRoute);
 
   // 启动
   await app.listen({ port: config.port, host: config.host });
@@ -53,6 +55,7 @@ async function bootstrap() {
   app.log.info(`   POST /api/compose       组合器`);
   app.log.info(`   GET  /api/category-map  品类地图 ⭐ M4`);
   app.log.info(`   GET  /api/underperform  未起量诊断 ⭐ M4`);
+  app.log.info(`   *    /api/cards          概念卡持久化 ⭐ M5`);
 }
 
 bootstrap().catch((err) => {

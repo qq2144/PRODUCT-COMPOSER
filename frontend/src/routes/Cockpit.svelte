@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
   import { api } from '../lib/api';
   import type { Overview } from '../lib/types';
 
@@ -59,6 +60,31 @@
       </div>
     </div>
 
+    <!-- M5：本月活动 -->
+    <div class="activity-row">
+      <div class="activity">
+        <div class="a-emoji">🆕</div>
+        <div class="a-body">
+          <div class="a-num">{overview.newModulesThisMonth}</div>
+          <div class="a-label">本月新增模块</div>
+        </div>
+      </div>
+      <Link to="/concepts" class="activity activity-link">
+        <div class="a-emoji">📋</div>
+        <div class="a-body">
+          <div class="a-num">{overview.newCardsThisMonth}</div>
+          <div class="a-label">本月新增概念卡 →</div>
+        </div>
+      </Link>
+      <Link to="/underperform" class="activity activity-link activity-warn">
+        <div class="a-emoji">⚠️</div>
+        <div class="a-body">
+          <div class="a-num">{overview.zeroSalesSkus}</div>
+          <div class="a-label">未起量 SKU 待诊断 →</div>
+        </div>
+      </Link>
+    </div>
+
     <div class="row-2">
       <div class="card">
         <h3>📦 品类分布 TOP 10</h3>
@@ -89,6 +115,27 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- M5：模块引用 TOP 5 -->
+    <div class="card">
+      <h3>🧩 模块引用 TOP 5 <span class="muted small">— 哪些模块被组合最多</span></h3>
+      {#if overview.moduleReuseTop.length === 0}
+        <div class="empty-mini">暂无</div>
+      {:else}
+        <table class="rank">
+          <tbody>
+            {#each overview.moduleReuseTop as m, i (m.moduleId)}
+              <tr>
+                <td class="idx">{i + 1}</td>
+                <td><code>{m.moduleId}</code></td>
+                <td>{m.moduleName}</td>
+                <td class="num">{m.reuseCount}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {/if}
     </div>
 
     <div class="card meta">
@@ -187,4 +234,46 @@
     color: var(--gray-500);
     font-size: 12px;
   }
+  /* M5：本月活动行 */
+  .activity-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .activity {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--gray-900);
+    text-decoration: none;
+  }
+  :global(.activity-link:hover) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    transition: all 0.15s;
+  }
+  .a-emoji { font-size: 28px; }
+  .a-num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-mono);
+    line-height: 1.1;
+  }
+  :global(.activity-warn .a-num) { color: var(--danger); }
+  .a-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .muted.small { color: var(--gray-400); font-size: 11px; font-weight: 400; margin-left: 6px; }
+  .empty-mini { color: var(--gray-400); font-size: 12px; padding: 12px; text-align: center; }
+  .rank code { color: var(--primary); font-size: 11px; }
 </style>

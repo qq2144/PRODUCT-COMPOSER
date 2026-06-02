@@ -1,0 +1,141 @@
+{
+  "id": "card-20260602114310-kxucbo",
+  "name": "SERUNA 极简 眼罩 v1 草案",
+  "summary": "主打舒适、助眠；面向居家睡眠场景；对标自家爆品 SERUNA YZ19（销量 1397）",
+  "rawText": "SERUNA助眠眼罩，亲肤极简风",
+  "userQuadrant": "",
+  "author": "内部用户",
+  "status": "draft",
+  "payload": {
+    "parsedIntent": {
+      "category": "眼罩",
+      "userScenes": [
+        "居家睡眠"
+      ],
+      "functions": [
+        "舒适",
+        "助眠"
+      ],
+      "brand": "SERUNA",
+      "style": "极简",
+      "rawText": "SERUNA助眠眼罩，亲肤极简风"
+    },
+    "matchedModules": {
+      "版型模块": [
+        {
+          "moduleId": "BX-HH-01",
+          "moduleType": "版型模块",
+          "moduleName": "亲肤带孔莱卡布",
+          "factory": "博凯",
+          "material": "亲肤带孔莱卡布",
+          "reuseCount": 5,
+          "matchedKeywords": [
+            "亲肤"
+          ],
+          "matchReason": "命中关键词：亲肤"
+        },
+        {
+          "moduleId": "BX-HY-05",
+          "moduleType": "版型模块",
+          "moduleName": "带孔亲肤复合面料",
+          "factory": "博凯",
+          "material": "带孔亲肤复合面料",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "亲肤"
+          ],
+          "matchReason": "命中关键词：亲肤"
+        }
+      ],
+      "外观模块": [
+        {
+          "moduleId": "03.19.04",
+          "moduleType": "外观模块",
+          "moduleName": "75*40mm seruna丝印黑色",
+          "factory": "博凯",
+          "material": "复合",
+          "reuseCount": 2,
+          "matchedKeywords": [
+            "seruna"
+          ],
+          "matchReason": "命中关键词：seruna"
+        },
+        {
+          "moduleId": "03.19.05",
+          "moduleType": "外观模块",
+          "moduleName": "75*40mm seruna丝印灰色",
+          "factory": "博凯",
+          "material": "复合",
+          "reuseCount": 2,
+          "matchedKeywords": [
+            "seruna"
+          ],
+          "matchReason": "命中关键词：seruna"
+        },
+        {
+          "moduleId": "03.19.08",
+          "moduleType": "外观模块",
+          "moduleName": "30*23mm seruna+富士山丝印灰色",
+          "factory": "博凯",
+          "material": "复合",
+          "reuseCount": 2,
+          "matchedKeywords": [
+            "seruna"
+          ],
+          "matchReason": "命中关键词：seruna"
+        },
+        {
+          "moduleId": "03.14.01（左） 03.14.02（右）",
+          "moduleType": "外观模块",
+          "moduleName": "11.5*65mm SERUNA硅胶烫标左手蓝色",
+          "factory": "博凯",
+          "material": "胶印",
+          "reuseCount": 2,
+          "matchedKeywords": [
+            "seruna"
+          ],
+          "matchReason": "命中关键词：seruna"
+        },
+        {
+          "moduleId": "03.17.11",
+          "moduleType": "外观模块",
+          "moduleName": "32.8*4.2mmSERUNA白蓝色发泡烫标",
+          "factory": "博凯",
+          "material": "",
+          "reuseCount": 2,
+          "matchedKeywords": [
+            "seruna"
+          ],
+          "matchReason": "命中关键词：seruna"
+        }
+      ]
+    },
+    "totalMatchedModules": 7,
+    "assetComparison": {
+      "sameCategorySkuCount": 64,
+      "sameCategoryBrands": [
+        "SERUNA",
+        "TMT"
+      ],
+      "topSeller": {
+        "productAbbrev": "YZ19",
+        "name": "重力眼罩帽",
+        "brand": "SERUNA",
+        "totalSales": 1397
+      },
+      "totalSalesInCategory": 3389,
+      "competitorIntelCount": 0
+    },
+    "conceptCardDraft": {
+      "name": "SERUNA 极简 眼罩 v1 草案",
+      "summary": "主打舒适、助眠；面向居家睡眠场景；对标自家爆品 SERUNA YZ19（销量 1397）",
+      "moduleCount": 7,
+      "needsValidation": [
+        "面料模块：暂无匹配，建议补关键词或人工挑选",
+        "功能模块：暂无匹配，建议补关键词或人工挑选"
+      ]
+    }
+  },
+  "createdAt": "2026-06-02T03:43:10.683Z",
+  "updatedAt": "2026-06-02T04:04:15.819Z"
+}

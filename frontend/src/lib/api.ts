@@ -12,6 +12,10 @@ import type {
   CategoryMapResult,
   UnderperformList,
   SkuDiagnosis,
+  ConceptCardSummary,
+  ConceptCardSaved,
+  ConceptCardStatus,
+  CreateCardInput,
 } from './types';
 
 const http = axios.create({
@@ -61,4 +65,24 @@ export const api = {
 
   diagnoseSku: (productAbbrev: string) =>
     http.get<SkuDiagnosis>(`/underperform/${encodeURIComponent(productAbbrev)}`).then((r) => r.data),
+
+  // ============ 概念卡 (M5) ============
+  saveCard: (input: CreateCardInput) =>
+    http.post<ConceptCardSaved>('/cards', input).then((r) => r.data),
+
+  listCards: (
+    q: { author?: string; brand?: string; category?: string; quadrant?: string; status?: ConceptCardStatus; q?: string } = {},
+  ) =>
+    http.get<{ total: number; items: ConceptCardSummary[] }>('/cards', { params: q }).then((r) => r.data),
+
+  getCard: (id: string) =>
+    http.get<ConceptCardSaved>(`/cards/${encodeURIComponent(id)}`).then((r) => r.data),
+
+  updateCard: (
+    id: string,
+    patch: { name?: string; userQuadrant?: string; status?: ConceptCardStatus },
+  ) => http.patch<ConceptCardSaved>(`/cards/${encodeURIComponent(id)}`, patch).then((r) => r.data),
+
+  deleteCard: (id: string) =>
+    http.delete<{ ok: true }>(`/cards/${encodeURIComponent(id)}`).then((r) => r.data),
 };

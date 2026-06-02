@@ -45,6 +45,12 @@ export interface Overview {
   factories: number;
   categoriesTop: Array<{ name: string; count: number }>;
   brandsTop: Array<{ name: string; count: number }>;
+  /** M5：本月新增模块数 */
+  newModulesThisMonth: number;
+  /** M5：模块引用 TOP 5 */
+  moduleReuseTop: Array<{ moduleId: string; moduleName: string; reuseCount: number }>;
+  /** M5：本月新增概念卡数 */
+  newCardsThisMonth: number;
   loadedAt: string;
 }
 
@@ -117,6 +123,43 @@ export interface ComposeResult {
   totalMatchedModules: number;
   assetComparison: AssetComparison;
   conceptCardDraft: ConceptCardDraft;
+}
+
+// ============ 概念卡持久化 (M5) ============
+export type ConceptCardStatus = 'draft' | 'discussion' | 'sample' | 'archived';
+
+export interface ConceptCardSummary {
+  id: string;
+  name: string;
+  summary: string;
+  rawText: string;
+  userQuadrant: string;
+  author: string;
+  status: ConceptCardStatus;
+  totalMatchedModules: number;
+  parsedCategory: string;
+  parsedBrand: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ConceptCardSaved extends ConceptCardSummary {
+  payload: {
+    parsedIntent: ParsedIntent;
+    matchedModules: Record<string, MatchedModule[]>;
+    totalMatchedModules: number;
+    assetComparison: AssetComparison;
+    conceptCardDraft: ConceptCardDraft;
+  };
+}
+
+export interface CreateCardInput {
+  name: string;
+  summary: string;
+  rawText: string;
+  userQuadrant: string;
+  author?: string;
+  payload: ConceptCardSaved['payload'];
 }
 
 // ============ 品类地图 (M4) ============

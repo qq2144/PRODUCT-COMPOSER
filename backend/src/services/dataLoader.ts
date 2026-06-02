@@ -49,7 +49,7 @@ function toNum(v: string | undefined, fallback = 0): number {
 export async function loadData(): Promise<Store> {
   if (store) return store;
 
-  const [products, modules, links, competitors] = await Promise.all([
+  const [products, rawModules, links, competitors] = await Promise.all([
     readCsv<ProductAsset>('product_assets.csv', (r) => ({
       sku_full_id: r.sku_full_id ?? '',
       code: r['商家编码'] ?? '',
@@ -104,6 +104,21 @@ export async function loadData(): Promise<Store> {
     })),
   ]);
 
+  // modules.csv 历史上出现过 module_id 重复（同一编号两行不同信息），
+  // Svelte 5 的 {#each ... (key)} 对重复 key 会抛 each_key_duplicate 并停渲染，
+  // 导致组合器结果整段不显示、loading 卡死。这里按 id 去重（后入覆盖，保留更全的行）。
+  const moduleMap = new Map<string, Module>();
+  const dupIds: string[] = [];
+  for (const m of rawModules) {
+    if (!m.module_id) continue;
+    if (moduleMap.has(m.module_id)) dupIds.push(m.module_id);
+    moduleMap.set(m.module_id, m);
+  }
+  const modules = Array.from(moduleMap.values());
+  if (dupIds.length > 0) {
+    console.warn(`[dataLoader] modules.csv 有 ${dupIds.length} 个重复 module_id，已按后入覆盖去重: ${dupIds.join(', ')}`);
+  }
+
   // 计算 overview
   const categoryCount = new Map<string, number>();
   const brandCount = new Map<string, number>();
@@ -119,6 +134,31 @@ export async function loadData(): Promise<Store> {
 
   const factories = new Set(modules.map((m) => m.factory_src).filter(Boolean));
 
+  // M5：本月新增模块 — design_time 格式有 "2025.09.25" / "2026-06-01" / 空
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const monthPrefixes = [`${yyyy}.${mm}`, `${yyyy}-${mm}`, `${yyyy}/${mm}`];
+  const newModulesThisMonth = modules.filter((m) =>
+    monthPrefixes.some((p) => m.design_time.startsWith(p)),
+  ).length;
+
+  // M5：模块引用 TOP 5 — 按 module_id 聚合 link 数
+  const linkCount = new Map<string, number>();
+  for (const l of links) {
+    if (!l.module_id) continue;
+    linkCount.set(l.module_id, (linkCount.get(l.module_id) ?? 0) + 1);
+  }
+  const moduleById = new Map(modules.map((m) => [m.module_id, m]));
+  const moduleReuseTop = Array.from(linkCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([moduleId, reuseCount]) => ({
+      moduleId,
+      moduleName: moduleById.get(moduleId)?.module_name ?? moduleId,
+      reuseCount,
+    }));
+
   const overview: Overview = {
     totalSkus: products.length,
     totalModules: modules.length,
@@ -129,6 +169,8 @@ export async function loadData(): Promise<Store> {
     factories: factories.size,
     categoriesTop,
     brandsTop,
+    newModulesThisMonth,
+    moduleReuseTop,
   };
 
   store = {

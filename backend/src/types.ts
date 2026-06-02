@@ -86,4 +86,56 @@ export interface Overview {
   factories: number;
   categoriesTop: Array<{ name: string; count: number }>;
   brandsTop: Array<{ name: string; count: number }>;
+  /** M5：本月新增的模块数（按 modules.design_time 起始为当月 YYYY.MM 或 YYYY-MM） */
+  newModulesThisMonth: number;
+  /** M5：模块引用 TOP 5（links 按 module_id 聚合）*/
+  moduleReuseTop: Array<{ moduleId: string; moduleName: string; reuseCount: number }>;
+}
+
+/**
+ * M5：概念卡持久化
+ * 文件位置：data/cards/{id}.json
+ * 由 /api/compose 的返回值 + 用户输入（自选象限 / 作者）一起组装
+ */
+export type ConceptCardStatus = 'draft' | 'discussion' | 'sample' | 'archived';
+
+export interface ConceptCardSaved {
+  id: string;
+  /** 概念卡名字（默认从 conceptCardDraft.name 来，PATCH 可改）*/
+  name: string;
+  summary: string;
+  /** 原始输入文本 */
+  rawText: string;
+  /** 用户自选的 4 象限标签（'' 表示未选）*/
+  userQuadrant: string;
+  /** 作者标签（v1 默认 "内部用户"）*/
+  author: string;
+  /** 状态：草案 → 进入讨论 → 打样 → 归档 */
+  status: ConceptCardStatus;
+  /** 原始组合器返回（用于详情页完整展示）*/
+  payload: {
+    parsedIntent: unknown;
+    matchedModules: unknown;
+    totalMatchedModules: number;
+    assetComparison: unknown;
+    conceptCardDraft: unknown;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** 列表页返回的精简结构（不含 payload）*/
+export interface ConceptCardSummary {
+  id: string;
+  name: string;
+  summary: string;
+  rawText: string;
+  userQuadrant: string;
+  author: string;
+  status: ConceptCardStatus;
+  totalMatchedModules: number;
+  parsedCategory: string;
+  parsedBrand: string;
+  createdAt: string;
+  updatedAt: string;
 }
