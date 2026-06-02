@@ -1,11 +1,14 @@
 <script lang="ts">
   import { api } from '../lib/api';
-  import type { ComposeResult } from '../lib/types';
+  import type { ComposeResult, QuadrantLabel } from '../lib/types';
 
   let text = $state('');
   let result = $state<ComposeResult | null>(null);
   let loading = $state(false);
   let error = $state<string | null>(null);
+
+  /** 用户自选的 4 象限标签 - 系统不评判，仅展示客观数据，用户基于事实判断 */
+  let userQuadrant = $state<QuadrantLabel>('');
 
   const examples = [
     '我想做一个 SERUNA 风格的护膝，要舒适、包裹性强，户外运动能用',
@@ -13,11 +16,19 @@
     '奈肤 助眠眼罩，亲肤极简风',
   ];
 
+  const QUADRANT_OPTIONS: Array<{ key: QuadrantLabel; emoji: string; label: string; hint: string }> = [
+    { key: 'star',      emoji: '🌟', label: '明星', hint: '大市场 × 强需求 · 重点投入' },
+    { key: 'potential', emoji: '⭐', label: '潜力', hint: '小市场 × 强需求 · 小样测试' },
+    { key: 'redsea',    emoji: '🌊', label: '红海', hint: '大市场 × 弱需求 · 需明显差异' },
+    { key: 'chicken',   emoji: '❌', label: '鸡肋', hint: '小市场 × 弱需求 · 默认放弃' },
+  ];
+
   async function submit() {
     if (!text.trim()) return;
     loading = true;
     error = null;
     result = null;
+    userQuadrant = '';
     try {
       result = await api.compose(text);
     } catch (e) {
@@ -32,12 +43,16 @@
     submit();
   }
 
-  function quadrantClass(label: string): string {
-    if (label === '明星') return 'q-star';
-    if (label === '潜力') return 'q-potential';
-    if (label === '红海') return 'q-red';
-    if (label === '鸡肋') return 'q-chicken';
-    return 'q-unknown';
+  function selectQuadrant(q: QuadrantLabel) {
+    userQuadrant = userQuadrant === q ? '' : q;
+  }
+
+  function quadrantClass(label: QuadrantLabel): string {
+    if (label === 'star') return 'q-star';
+    if (label === 'potential') return 'q-potential';
+    if (label === 'redsea') return 'q-red';
+    if (label === 'chicken') return 'q-chicken';
+    return '';
   }
 </script>
 
@@ -109,48 +124,74 @@
       </div>
     </div>
 
-    <!-- 2. 4 象限定位 + 资产对照（左右两栏） -->
-    <div class="row-2">
-      <div class="card quadrant {quadrantClass(result.opportunityQuadrant.label)}">
-        <div class="q-emoji">{result.opportunityQuadrant.emoji}</div>
-        <div class="q-label">{result.opportunityQuadrant.label}场景</div>
-        <div class="q-meta">
-          {result.opportunityQuadrant.marketSize === 'large' ? '大市场' : '小市场'} ×
-          {result.opportunityQuadrant.demandStrength === 'strong' ? '强需求' : '弱需求'}
+    <!-- 2. 同品类资产对照（客观事实） -->
+    <div class="card section">
+      <div class="section-title">📊 同品类资产对照（事实数据，不评判）</div>
+
+      <div class="facts-grid">
+        <div class="fact-item">
+          <div class="fact-num">{result.assetComparison.sameCategorySkuCount.toLocaleString()}</div>
+          <div class="fact-label">同品类 SKU 销售行</div>
         </div>
-        <div class="q-reason">{result.opportunityQuadrant.reasoning}</div>
+        <div class="fact-item">
+          <div class="fact-num">{result.assetComparison.sameCategoryBrands.length}</div>
+          <div class="fact-label">涉及品牌</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-num">
+            {result.assetComparison.topSeller?.totalSales.toLocaleString() ?? '—'}
+          </div>
+          <div class="fact-label">同品类爆品销量</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-num">{result.assetComparison.competitorIntelCount}</div>
+          <div class="fact-label">竞品情报</div>
+        </div>
       </div>
 
-      <div class="card asset-comp">
-        <div class="section-title">📊 同品类资产对照</div>
-        <div class="kv">
-          <span>同品类 SKU 销售行</span>
-          <strong>{result.assetComparison.sameCategorySkuCount.toLocaleString()}</strong>
+      {#if result.assetComparison.topSeller}
+        <div class="top-seller-row">
+          🏆 <span class="muted">同品类爆品：</span>
+          <span class="pill pill-primary">{result.assetComparison.topSeller.brand}</span>
+          <code>{result.assetComparison.topSeller.productAbbrev}</code>
+          {result.assetComparison.topSeller.name}
+          <span class="sales-tag">销量 {result.assetComparison.topSeller.totalSales.toLocaleString()}</span>
         </div>
-        <div class="kv">
-          <span>涉及品牌</span>
-          <strong>{result.assetComparison.sameCategoryBrands.length} 个</strong>
-        </div>
-        {#if result.assetComparison.topSeller}
-          <div class="kv top-seller">
-            <span>🏆 同品类爆品</span>
-            <span>
-              <span class="pill pill-primary">{result.assetComparison.topSeller.brand}</span>
-              <code>{result.assetComparison.topSeller.productAbbrev}</code>
-              <strong class="sales">{result.assetComparison.topSeller.totalSales.toLocaleString()}</strong>
-            </span>
-          </div>
-        {/if}
-        <div class="kv">
-          <span>该品类竞品情报</span>
-          <strong>{result.assetComparison.competitorIntelCount} 条</strong>
-        </div>
+      {/if}
+
+      {#if result.assetComparison.sameCategoryBrands.length > 0}
         <div class="brand-tags">
+          <span class="muted small">已有品牌：</span>
           {#each result.assetComparison.sameCategoryBrands as b}
             <span class="pill pill-default">{b}</span>
           {/each}
         </div>
+      {/if}
+    </div>
+
+    <!-- 3. 用户自选 4 象限（不评判，让人决策） -->
+    <div class="card section">
+      <div class="section-title">
+        🎯 你来判定机会象限
+        <span class="muted small">— 基于上面的事实数据，你自己选</span>
       </div>
+      <div class="quadrant-picker">
+        {#each QUADRANT_OPTIONS as opt (opt.key)}
+          <button
+            class="q-option {quadrantClass(opt.key)}"
+            class:q-selected={userQuadrant === opt.key}
+            onclick={() => selectQuadrant(opt.key)}
+            type="button"
+          >
+            <div class="q-emoji">{opt.emoji}</div>
+            <div class="q-label">{opt.label}</div>
+            <div class="q-hint">{opt.hint}</div>
+          </button>
+        {/each}
+      </div>
+      {#if userQuadrant === ''}
+        <div class="q-not-picked">未选 = 系统不替你打标签，可以一直留空</div>
+      {/if}
     </div>
 
     <!-- 3. 模块匹配 -->
@@ -201,7 +242,14 @@
       <p class="concept-summary">{result.conceptCardDraft.summary}</p>
       <div class="concept-stats">
         <span class="pill pill-primary">{result.conceptCardDraft.moduleCount} 个匹配模块</span>
-        <span class="pill {quadrantClass(result.opportunityQuadrant.label)}">{result.opportunityQuadrant.emoji} {result.opportunityQuadrant.label}</span>
+        {#if userQuadrant}
+          {@const opt = QUADRANT_OPTIONS.find(o => o.key === userQuadrant)}
+          {#if opt}
+            <span class="pill {quadrantClass(userQuadrant)}">{opt.emoji} {opt.label}（你的判定）</span>
+          {/if}
+        {:else}
+          <span class="pill pill-default">未选象限</span>
+        {/if}
       </div>
 
       {#if result.conceptCardDraft.needsValidation.length > 0}
@@ -351,102 +399,119 @@
     color: var(--gray-400);
   }
 
-  /* Row 2 */
-  .row-2 {
+  /* === 事实数据展示（无评判） === */
+  .facts-grid {
     display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 14px;
-    margin-top: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
   }
-
-  /* Quadrant card */
-  .quadrant {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .fact-item {
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
     text-align: center;
   }
-  .q-emoji {
-    font-size: 56px;
-    margin-bottom: 8px;
-  }
-  .q-label {
-    font-size: 22px;
+  .fact-num {
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .q-meta {
-    font-size: 12px;
-    color: var(--gray-500);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .q-reason {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--gray-700);
-  }
-  .q-star { background: linear-gradient(135deg, #fef9c3, #fef3c7); }
-  .q-star .q-label { color: #b45309; }
-  .q-potential { background: linear-gradient(135deg, #dbeafe, #e0e7ff); }
-  .q-potential .q-label { color: #1d4ed8; }
-  .q-red { background: linear-gradient(135deg, #fee2e2, #fecaca); }
-  .q-red .q-label { color: #b91c1c; }
-  .q-chicken { background: linear-gradient(135deg, #f3f4f6, #e5e7eb); }
-  .q-chicken .q-label { color: var(--gray-500); }
-  .q-unknown { background: var(--gray-50); }
-  .q-unknown .q-label { color: var(--gray-500); }
-
-  /* Pill quadrant tags */
-  :global(.pill.q-star) { background: #fef3c7; color: #92400e; }
-  :global(.pill.q-potential) { background: #dbeafe; color: #1d4ed8; }
-  :global(.pill.q-red) { background: #fee2e2; color: #b91c1c; }
-  :global(.pill.q-chicken) { background: #f3f4f6; color: var(--gray-500); }
-  :global(.pill.q-unknown) { background: var(--gray-100); color: var(--gray-500); }
-
-  /* Asset comparison */
-  .asset-comp {
-    padding: 20px;
-  }
-  .kv {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px dashed var(--gray-200);
-    font-size: 13px;
-  }
-  .kv span {
-    color: var(--gray-500);
-  }
-  .kv strong {
-    color: var(--gray-900);
-    font-family: var(--font-mono);
-  }
-  .kv.top-seller {
-    background: var(--primary-light);
-    padding: 10px 12px;
-    border-radius: var(--radius-sm);
-    border-bottom: none;
-    margin: 4px 0;
-  }
-  .kv.top-seller span {
     color: var(--primary);
-    font-weight: 600;
+    font-family: var(--font-mono);
+    line-height: 1.2;
   }
-  .kv .sales {
+  .fact-label {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .top-seller-row {
+    background: var(--primary-light);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .sales-tag {
     color: var(--success);
-    margin-left: 6px;
+    font-weight: 700;
+    margin-left: auto;
+    font-family: var(--font-mono);
   }
   .brand-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-top: 12px;
+    align-items: center;
+    margin-top: 8px;
   }
+
+  /* === 用户自选 4 象限 === */
+  .quadrant-picker {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .q-option {
+    background: var(--gray-50);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    color: var(--gray-700);
+  }
+  .q-option:hover {
+    background: var(--gray-100);
+    transform: translateY(-1px);
+  }
+  .q-option .q-emoji {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+  .q-option .q-label {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--gray-700);
+  }
+  .q-option .q-hint {
+    font-size: 10px;
+    color: var(--gray-500);
+    line-height: 1.4;
+  }
+  .q-option.q-selected {
+    border-width: 2px;
+    box-shadow: var(--shadow-md);
+  }
+  .q-option.q-selected .q-label { color: white; font-weight: 700; }
+  .q-option.q-selected .q-hint { color: rgba(255,255,255,0.85); }
+
+  .q-option.q-star.q-selected         { background: #f59e0b; border-color: #d97706; }
+  .q-option.q-potential.q-selected    { background: #3b82f6; border-color: #2563eb; }
+  .q-option.q-red.q-selected          { background: #ef4444; border-color: #dc2626; }
+  .q-option.q-chicken.q-selected      { background: var(--gray-500); border-color: var(--gray-700); }
+
+  .q-not-picked {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--gray-500);
+    text-align: center;
+  }
+
+  /* === 概念卡里的象限 pill 颜色 === */
+  :global(.pill.q-star) { background: #fef3c7; color: #92400e; }
+  :global(.pill.q-potential) { background: #dbeafe; color: #1d4ed8; }
+  :global(.pill.q-red) { background: #fee2e2; color: #b91c1c; }
+  :global(.pill.q-chicken) { background: #f3f4f6; color: var(--gray-500); }
 
   /* Module list */
   .module-dim {

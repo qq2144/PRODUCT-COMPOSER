@@ -82,14 +82,6 @@ export interface AssetComparison {
   competitorIntelCount: number;   // 同品类竞品情报条数
 }
 
-export interface OpportunityQuadrant {
-  label: '明星' | '潜力' | '红海' | '鸡肋' | '未知';
-  emoji: string;
-  marketSize: 'large' | 'small';
-  demandStrength: 'strong' | 'weak';
-  reasoning: string;
-}
-
 export interface ConceptCardDraft {
   name: string;
   summary: string;
@@ -102,7 +94,7 @@ export interface ComposeResult {
   matchedModules: ModuleMatchByDimension;
   totalMatchedModules: number;
   assetComparison: AssetComparison;
-  opportunityQuadrant: OpportunityQuadrant;
+  /** v1 阶段不做自动判定。象限由用户在前端基于事实数据自行选择并保存。 */
   conceptCardDraft: ConceptCardDraft;
 }
 
@@ -275,48 +267,8 @@ function getAssetComparison(
   };
 }
 
-// ============ Step 4: 4 象限机会判定 ============
-function getOpportunityQuadrant(comparison: AssetComparison): OpportunityQuadrant {
-  // 阈值（v1 启发式，可后续调优）
-  const LARGE_MARKET_SKU_THRESHOLD = 100;     // 同品类 SKU 销售行 >= 100 = 大市场
-  const STRONG_DEMAND_SALES_THRESHOLD = 1000; // 爆品销量 >= 1000 = 强需求
-
-  if (comparison.sameCategorySkuCount === 0) {
-    return {
-      label: '未知',
-      emoji: '❓',
-      marketSize: 'small',
-      demandStrength: 'weak',
-      reasoning: '该品类自家暂无产品资产，无法判定市场规模（建议先补数据或归类为「品类地图缺失」机会）',
-    };
-  }
-
-  const marketSize: 'large' | 'small' =
-    comparison.sameCategorySkuCount >= LARGE_MARKET_SKU_THRESHOLD ? 'large' : 'small';
-  const demandStrength: 'strong' | 'weak' =
-    (comparison.topSeller?.totalSales ?? 0) >= STRONG_DEMAND_SALES_THRESHOLD ? 'strong' : 'weak';
-
-  let label: OpportunityQuadrant['label'];
-  let emoji: string;
-  let reasoning: string;
-  if (marketSize === 'large' && demandStrength === 'strong') {
-    label = '明星'; emoji = '🌟';
-    reasoning = `同品类自家 ${comparison.sameCategorySkuCount} 个 SKU 销售行 + 爆品销量 ${comparison.topSeller?.totalSales ?? 0} → 大市场强需求，重点投入`;
-  } else if (marketSize === 'small' && demandStrength === 'strong') {
-    label = '潜力'; emoji = '⭐';
-    reasoning = `同品类 SKU 不多(${comparison.sameCategorySkuCount}) 但有爆品(${comparison.topSeller?.totalSales ?? 0}) → 小而美潜力场景，建议小样测试`;
-  } else if (marketSize === 'large' && demandStrength === 'weak') {
-    label = '红海'; emoji = '🌊';
-    reasoning = `同品类 SKU 数多(${comparison.sameCategorySkuCount}) 但无爆品 → 红海场景，仅当能做出明显差异时入场`;
-  } else {
-    label = '鸡肋'; emoji = '❌';
-    reasoning = `同品类 SKU 少(${comparison.sameCategorySkuCount}) 且无爆品 → 鸡肋，默认不做`;
-  }
-
-  return { label, emoji, marketSize, demandStrength, reasoning };
-}
-
-// ============ Step 5: 概念卡草案 ============
+// ============ Step 4: 概念卡草案 ============
+// 注：v1 不做 4 象限自动判定。象限标签由用户在前端基于事实数据自行选择。
 function generateConceptCard(
   intent: ParsedIntent,
   matched: ModuleMatchByDimension,
@@ -366,7 +318,6 @@ export async function compose(text: string): Promise<ComposeResult> {
   const matchedModules = matchModules(parsedIntent, modules, links);
   const totalMatchedModules = Object.values(matchedModules).reduce((s, arr) => s + arr.length, 0);
   const assetComparison = getAssetComparison(parsedIntent, products, competitors);
-  const opportunityQuadrant = getOpportunityQuadrant(assetComparison);
   const conceptCardDraft = generateConceptCard(parsedIntent, matchedModules, assetComparison);
 
   return {
@@ -374,7 +325,6 @@ export async function compose(text: string): Promise<ComposeResult> {
     matchedModules,
     totalMatchedModules,
     assetComparison,
-    opportunityQuadrant,
     conceptCardDraft,
   };
 }

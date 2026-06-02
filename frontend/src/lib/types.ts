@@ -101,13 +101,8 @@ export interface AssetComparison {
   competitorIntelCount: number;
 }
 
-export interface OpportunityQuadrant {
-  label: '明星' | '潜力' | '红海' | '鸡肋' | '未知';
-  emoji: string;
-  marketSize: 'large' | 'small';
-  demandStrength: 'strong' | 'weak';
-  reasoning: string;
-}
+/** 4 象限标签 - 用户自选，不由系统判定 */
+export type QuadrantLabel = 'star' | 'potential' | 'redsea' | 'chicken' | '';
 
 export interface ConceptCardDraft {
   name: string;
@@ -121,6 +116,5 @@ export interface ComposeResult {
   matchedModules: Record<string, MatchedModule[]>;
   totalMatchedModules: number;
   assetComparison: AssetComparison;
-  opportunityQuadrant: OpportunityQuadrant;
   conceptCardDraft: ConceptCardDraft;
 }
