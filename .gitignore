@@ -2,8 +2,10 @@
 # 淘玛特产品组合器 - 仓库忽略规则
 # ============================================
 
-# 货盘原始 xlsx（合计 ~100MB，太大不入库；保留沉淀脚本和产出 CSV）
+# 货盘 / 模块库 / 销量表原始 Excel（合计 ~244MB，太大不入库；保留 ETL 脚本和产出 CSV）
 货盘/*.xlsx
+RawData/**/*.xlsx
+RawData/**/*.xls
 
 # Claude Code 本地配置
 .claude/
@@ -38,6 +40,11 @@ Thumbs.db
 openclaw_output/.tmp/
 openclaw_output/*.log
 
+# 部署临时包 / 本地运行包
+product-composer-deploy-*.tar.gz
+product-composer-runtime-*.tar.gz
+.deploy-runtime/
+
 # 敏感信息（绝对别推上去）
 .env
 .env.*
@@ -45,3 +52,6 @@ openclaw_output/*.log
 *.pem
 secrets.yaml
 飞书_token*.txt
+
+# 鉴权 - 用户密码哈希，绝对不入 git
+data/users.json

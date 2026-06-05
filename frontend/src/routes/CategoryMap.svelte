@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
   import { api } from '../lib/api';
+  import Icon from '../lib/Icon.svelte';
   import type { CategoryMapResult, MatrixCell } from '../lib/types';
 
   let result = $state<CategoryMapResult | null>(null);
@@ -40,7 +41,7 @@
 </script>
 
 <div class="cm-page">
-  <h1>🗺️ 品类地图缺失</h1>
+  <h1><Icon name="map" size={20} /> 品类地图缺失</h1>
   <p class="sub">品牌 × 品类矩阵 — 红格 = 该品牌在该品类没有产品 = 潜在开拓机会</p>
 
   <!-- 控制条 -->
@@ -67,16 +68,16 @@
   </div>
 
   {#if loading}
-    <div class="card muted-center">加载中...</div>
+    <div class="card muted-center"><Icon name="loader-2" size={14} class="spin" /> 加载中…</div>
   {:else if error}
-    <div class="card err">❌ {error}</div>
+    <div class="card err"><Icon name="alert-circle" size={14} /> {error}</div>
   {:else if result}
     <!-- 图例 -->
     <div class="legend">
       <span class="leg cell-strong">≥200 SKU 主力</span>
       <span class="leg cell-medium">50-199 中等</span>
       <span class="leg cell-weak">&lt;50 少量</span>
-      <span class="leg cell-gap">❌ 缺口 - 点击进组合器</span>
+      <span class="leg cell-gap"><Icon name="x" size={11} /> 缺口 - 点击进组合器</span>
     </div>
 
     <!-- 矩阵 -->
@@ -110,7 +111,7 @@
                     : `${cell.skuRowCount} SKU销售行 · 销量 ${cell.totalSales}`}
                 >
                   {#if cell.isGap}
-                    <span class="gap-icon">❌</span>
+                    <span class="gap-icon"><Icon name="x" size={14} /></span>
                   {:else}
                     <div class="cell-num">{cell.skuRowCount}</div>
                     <div class="cell-sales">{cell.totalSales.toLocaleString()}</div>
@@ -124,8 +125,8 @@
     </div>
 
     <div class="card hint">
-      💡 <strong>使用建议</strong>：
-      点击任一红色 ❌ 缺口格子 → 跳转「组合器」并自动填入品牌迁移提示词 → 系统会基于同品类已有 SKU 提供模块参考。
+      <Icon name="info" size={15} /> <strong>使用建议</strong>：
+      点击任一红色缺口格子 → 跳转「组合器」并自动填入品牌迁移提示词 → 系统会基于同品类已有 SKU 提供模块参考。
       数字格子 = 该品牌在该品类的 SKU 销售行数 / 累计销量。
     </div>
   {/if}

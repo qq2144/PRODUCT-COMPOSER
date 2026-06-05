@@ -6,6 +6,8 @@
   "scripts": {
     "dev:backend": "pnpm --filter backend dev",
     "dev:frontend": "pnpm --filter frontend dev",
+    "dev:lan": "pnpm -r --parallel dev:lan",
+    "dev:lan:8002": "pnpm -r --parallel dev:lan:8002",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint"

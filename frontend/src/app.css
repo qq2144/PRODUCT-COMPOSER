@@ -49,6 +49,22 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+  /* 边框 / 焦点（v1.2 UI 优化新增） */
+  --border: var(--gray-200);
+  --border-strong: var(--gray-300);
+  --ring: 0 0 0 3px rgba(88, 86, 214, 0.18);
+  --ring-danger: 0 0 0 3px rgba(220, 38, 38, 0.18);
+
+  /* 过渡时长 / 缓动（UI 一致性） */
+  --t-fast: 120ms ease-out;
+  --t-base: 160ms ease-out;
+
+  /* 图标默认尺寸 */
+  --icon-sm: 14px;
+  --icon-md: 16px;
+  --icon-lg: 20px;
+  --icon-xl: 24px;
 }
 
 * {
@@ -70,42 +86,60 @@ body {
 .btn {
   padding: 8px 16px;
   border-radius: var(--radius-md);
-  border: none;
+  border: 1px solid transparent;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background var(--t-fast), color var(--t-fast),
+              box-shadow var(--t-fast), border-color var(--t-fast),
+              transform var(--t-fast);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-family: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 .btn-primary {
   background: var(--gradient);
   color: white;
 }
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 .btn-secondary {
   background: var(--gray-100);
   color: var(--gray-900);
+  border-color: var(--border);
 }
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   background: var(--gray-200);
 }
 .btn-ghost {
   background: transparent;
   color: var(--primary);
 }
-.btn-ghost:hover {
+.btn-ghost:hover:not(:disabled) {
   background: var(--primary-light);
 }
 .btn-sm {
   padding: 4px 10px;
   font-size: 12px;
 }
+.btn :global(svg) { flex-shrink: 0; }
 
 /* Pills */
 .pill {
@@ -126,17 +160,17 @@ body {
 .input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid var(--gray-300);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   font-size: 14px;
   font-family: var(--font-sans);
   outline: none;
-  transition: all 0.15s;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
   background: white;
 }
 .input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(88, 86, 214, 0.15);
+  box-shadow: var(--ring);
 }
 
 /* Card */
@@ -154,4 +188,33 @@ code {
   padding: 1px 6px;
   border-radius: var(--radius-sm);
   font-size: 12px;
+}
+
+/* Pill 内行内 SVG 对齐 */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pill :global(svg) {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* Lucide 图标默认行内对齐 */
+svg.lucide {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* reduce-motion 用户偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

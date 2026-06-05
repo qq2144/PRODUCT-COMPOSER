@@ -5,7 +5,7 @@
   "rawText": "SERUNA助眠眼罩，亲肤极简风",
   "userQuadrant": "",
   "author": "内部用户",
-  "status": "draft",
+  "status": "discussion",
   "payload": {
     "parsedIntent": {
       "category": "眼罩",
@@ -137,5 +137,5 @@
     }
   },
   "createdAt": "2026-06-02T03:43:10.683Z",
-  "updatedAt": "2026-06-02T04:04:15.819Z"
+  "updatedAt": "2026-06-02T04:24:50.414Z"
 }

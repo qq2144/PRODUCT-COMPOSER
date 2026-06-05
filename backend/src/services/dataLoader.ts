@@ -6,6 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import Papa from 'papaparse';
 import { config } from '../config.js';
+import { loadUserModules } from './userModulesStore.js';
 import type {
   ProductAsset,
   Module,
@@ -114,9 +115,18 @@ export async function loadData(): Promise<Store> {
     if (moduleMap.has(m.module_id)) dupIds.push(m.module_id);
     moduleMap.set(m.module_id, m);
   }
+  // 合并用户补录的模块（USR-* 前缀，立即可参与匹配）
+  const userModules = await loadUserModules();
+  for (const m of userModules) {
+    if (!m.module_id) continue;
+    moduleMap.set(m.module_id, m);
+  }
   const modules = Array.from(moduleMap.values());
   if (dupIds.length > 0) {
     console.warn(`[dataLoader] modules.csv 有 ${dupIds.length} 个重复 module_id，已按后入覆盖去重: ${dupIds.join(', ')}`);
+  }
+  if (userModules.length > 0) {
+    console.log(`[dataLoader] 合并了 ${userModules.length} 个用户补录模块`);
   }
 
   // 计算 overview
@@ -193,4 +203,16 @@ export function getStore(): Store {
 /** 测试/热重载用 */
 export function clearStore(): void {
   store = null;
+}
+
+/** 运行时新增一个模块到内存 store（用于 POST /api/modules 后立即可用） */
+export function pushModule(mod: Module): void {
+  if (!store) throw new Error('Data not loaded yet.');
+  // 与启动期同样的去重逻辑
+  const existing = store.modules.find((m) => m.module_id === mod.module_id);
+  if (existing) {
+    Object.assign(existing, mod);
+  } else {
+    store.modules.push(mod);
+  }
 }

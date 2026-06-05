@@ -46,9 +46,17 @@ function safeIdToPath(id: string): string {
 }
 
 function toSummary(card: ConceptCardSaved): ConceptCardSummary {
+  // 兼容老卡（category/brand 单值）和新卡（categories/brands 数组）
   const parsed = card.payload.parsedIntent as
-    | { category?: string; brand?: string }
+    | {
+        category?: string;
+        categories?: string[];
+        brand?: string;
+        brands?: string[];
+      }
     | undefined;
+  const cat = parsed?.categories?.[0] ?? parsed?.category ?? '';
+  const brd = parsed?.brands?.[0] ?? parsed?.brand ?? '';
   return {
     id: card.id,
     name: card.name,
@@ -57,9 +65,10 @@ function toSummary(card: ConceptCardSaved): ConceptCardSummary {
     userQuadrant: card.userQuadrant,
     author: card.author,
     status: card.status,
+    note: card.note ?? '',          // 老卡缺 note 兜空
     totalMatchedModules: card.payload.totalMatchedModules,
-    parsedCategory: parsed?.category ?? '',
-    parsedBrand: parsed?.brand ?? '',
+    parsedCategory: cat,
+    parsedBrand: brd,
     createdAt: card.createdAt,
     updatedAt: card.updatedAt,
   };
@@ -71,6 +80,8 @@ export interface CreateCardInput {
   rawText: string;
   userQuadrant: string;
   author?: string;
+  /** 可选；不传默认空。复制卡片时用来携带备注 */
+  note?: string;
   payload: ConceptCardSaved['payload'];
 }
 
@@ -85,6 +96,7 @@ export async function createCard(input: CreateCardInput): Promise<ConceptCardSav
     userQuadrant: input.userQuadrant ?? '',
     author: input.author ?? '内部用户',
     status: 'draft',
+    note: input.note ?? '',
     payload: input.payload,
     createdAt: now.toISOString(),
     updatedAt: now.toISOString(),
@@ -155,8 +167,12 @@ export async function listCards(query: ListCardsQuery = {}): Promise<{
 
 export interface UpdateCardInput {
   name?: string;
+  summary?: string;
   userQuadrant?: string;
   status?: ConceptCardStatus;
+  note?: string;
+  /** 改解析维度（前端编辑 5 维度 chip 后保存）— 整体覆盖 payload.parsedIntent */
+  parsedIntent?: unknown;
 }
 
 export async function updateCard(
@@ -167,9 +183,15 @@ export async function updateCard(
   if (!card) return null;
   const updated: ConceptCardSaved = {
     ...card,
+    note: card.note ?? '',
     ...(patch.name !== undefined ? { name: patch.name } : {}),
+    ...(patch.summary !== undefined ? { summary: patch.summary } : {}),
     ...(patch.userQuadrant !== undefined ? { userQuadrant: patch.userQuadrant } : {}),
     ...(patch.status !== undefined ? { status: patch.status } : {}),
+    ...(patch.note !== undefined ? { note: patch.note } : {}),
+    payload: patch.parsedIntent !== undefined
+      ? { ...card.payload, parsedIntent: patch.parsedIntent }
+      : card.payload,
     updatedAt: new Date().toISOString(),
   };
   await fs.writeFile(safeIdToPath(id), JSON.stringify(updated, null, 2), 'utf-8');

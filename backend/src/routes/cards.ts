@@ -23,6 +23,7 @@ const createSchema = z.object({
   rawText: z.string().min(1).max(2000),
   userQuadrant: z.string().max(20).default(''),
   author: z.string().max(60).optional(),
+  note: z.string().max(4000).optional(),
   payload: z.object({
     parsedIntent: z.unknown(),
     matchedModules: z.unknown(),
@@ -34,8 +35,18 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   name: z.string().min(1).max(200).optional(),
+  summary: z.string().max(2000).optional(),
   userQuadrant: z.string().max(20).optional(),
   status: z.enum(['draft', 'discussion', 'sample', 'archived']).optional(),
+  note: z.string().max(4000).optional(),
+  parsedIntent: z.object({
+    categories: z.array(z.string()).max(10).optional(),
+    brands: z.array(z.string()).max(10).optional(),
+    userScenes: z.array(z.string()).max(10).optional(),
+    functions: z.array(z.string()).max(15).optional(),
+    styles: z.array(z.string()).max(10).optional(),
+    rawText: z.string().max(2000).optional(),
+  }).passthrough().optional(),
 });
 
 const listQuerySchema = z.object({
@@ -54,9 +65,13 @@ export const cardsRoute: FastifyPluginAsync = async (app) => {
       reply.code(400);
       return { error: 'invalid input', details: parsed.error.issues };
     }
-    // zod 的 z.unknown() 推断为 optional，这里转回到 CreateCardInput；
-    // 运行时已通过 safeParse 校验过形状，cast 安全。
-    const card = await createCard(parsed.data as CreateCardInput);
+    // 作者字段：req body 显式传 → 用 body 值（允许"团队"等）
+    // 否则用当前登录用户名兜底
+    const author = parsed.data.author ?? req.currentUser ?? '内部用户';
+    const card = await createCard({
+      ...parsed.data,
+      author,
+    } as CreateCardInput);
     return card;
   });
 

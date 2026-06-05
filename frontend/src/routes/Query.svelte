@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { api } from '../lib/api';
+  import Icon from '../lib/Icon.svelte';
   import type { ProductAsset, Overview, Module } from '../lib/types';
 
   type TabKey = 'category' | 'brand' | 'module' | 'zero';
@@ -206,22 +207,22 @@
 </script>
 
 <div class="query-page">
-  <h1>🔍 产品查询中心</h1>
+  <h1><Icon name="search" size={20} /> 产品查询中心</h1>
   <p class="sub">4 个维度任意切换 + 多维筛选 · 真实 4620 SKU / 363 模块</p>
 
   <!-- Tab -->
   <div class="tabs">
     <button class="tab" class:active={activeTab === 'category'} onclick={() => switchTab('category')}>
-      📦 按品类 <span class="tab-num">{overview?.totalCategories ?? '-'}</span>
+      <Icon name="boxes" size={14} /> 按品类 <span class="tab-num">{overview?.totalCategories ?? '-'}</span>
     </button>
     <button class="tab" class:active={activeTab === 'brand'} onclick={() => switchTab('brand')}>
-      🏷️ 按品牌 <span class="tab-num">{overview?.totalBrands ?? '-'}</span>
+      <Icon name="tag" size={14} /> 按品牌 <span class="tab-num">{overview?.totalBrands ?? '-'}</span>
     </button>
     <button class="tab" class:active={activeTab === 'module'} onclick={() => switchTab('module')}>
-      🧩 按模块 <span class="tab-num">{overview?.totalModules ?? '-'}</span>
+      <Icon name="puzzle" size={14} /> 按模块 <span class="tab-num">{overview?.totalModules ?? '-'}</span>
     </button>
     <button class="tab" class:active={activeTab === 'zero'} onclick={() => switchTab('zero')}>
-      ⚠️ 未起量 <span class="tab-num">{overview?.zeroSalesSkus ?? '-'}</span>
+      <Icon name="alert-triangle" size={14} /> 未起量 <span class="tab-num">{overview?.zeroSalesSkus ?? '-'}</span>
     </button>
   </div>
 
@@ -250,7 +251,7 @@
         <span>销量 ≥</span>
         <input class="input narrow" type="number" placeholder="0" bind:value={filterSalesMin} />
       </label>
-      <input class="input search" type="text" placeholder="🔍 搜货号 / 货品名 / 规格" bind:value={searchQ} />
+      <input class="input search" type="text" placeholder="搜货号 / 货品名 / 规格" bind:value={searchQ} />
       <button class="btn btn-ghost btn-sm" onclick={clearGlobalFilters}>清空</button>
     </div>
   </div>
@@ -267,11 +268,11 @@
 
       {#if activeTab === 'zero'}
         <div class="side-zero-tip">
-          ⚠️ 233 个 0 销量 SKU 已在右侧直接显示<br>
+          <Icon name="alert-triangle" size={13} /> 233 个 0 销量 SKU 已在右侧直接显示<br>
           <span style="opacity:0.7;font-size:11px;">用顶部筛选条缩小范围</span>
         </div>
       {:else if loading && sideList.length === 0}
-        <div class="muted">加载中...</div>
+        <div class="muted"><Icon name="loader-2" size={13} class="spin" /> 加载中…</div>
       {:else}
         <div class="side-list">
           {#each sideList as item (item.key)}
@@ -294,11 +295,11 @@
     <section class="content">
       {#if error}
         <div class="card error">
-          ❌ {error}
+          <Icon name="alert-circle" size={14} /> {error}
           <p style="margin-top:6px;font-size:12px;">请确认后端运行：<code>pnpm dev:backend</code></p>
         </div>
       {:else if loading}
-        <div class="card muted-center">加载中...</div>
+        <div class="card muted-center"><Icon name="loader-2" size={14} class="spin" /> 加载中…</div>
       {:else if activeTab === 'module' && moduleDetail}
         <!-- 模块详情 -->
         <div class="card module-header">
@@ -402,7 +403,7 @@
           <div class="card empty">没有匹配的 SKU</div>
         {/if}
       {:else}
-        <div class="card empty">👈 左侧选一项查看详情</div>
+        <div class="card empty"><Icon name="chevron-left" size={14} /> 左侧选一项查看详情</div>
       {/if}
     </section>
   </div>

@@ -5,7 +5,8 @@
  */
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import { getStore } from '../services/dataLoader.js';
+import { getStore, pushModule } from '../services/dataLoader.js';
+import { appendUserModule } from '../services/userModulesStore.js';
 
 const queryListSchema = z.object({
   type: z.string().optional(),
@@ -14,6 +15,13 @@ const queryListSchema = z.object({
   q: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(500).default(100),
   offset: z.coerce.number().int().min(0).default(0),
+});
+
+const createModuleSchema = z.object({
+  dimension: z.string().min(1).max(40),
+  name: z.string().min(1).max(120),
+  description: z.string().max(2000).default(''),
+  material: z.string().max(200).optional(),
 });
 
 export const modulesRoute: FastifyPluginAsync = async (app) => {
@@ -49,6 +57,25 @@ export const modulesRoute: FastifyPluginAsync = async (app) => {
     }));
 
     return { total, limit: parsed.limit, offset: parsed.offset, items: page };
+  });
+
+  // 用户补录新模块
+  app.post('/api/modules', async (req, reply) => {
+    const parsed = createModuleSchema.safeParse(req.body);
+    if (!parsed.success) {
+      reply.code(400);
+      return { error: 'invalid input', details: parsed.error.issues };
+    }
+    const author = (req as { currentUser?: string }).currentUser ?? '内部用户';
+    const mod = await appendUserModule({
+      dimension: parsed.data.dimension,
+      name: parsed.data.name,
+      description: parsed.data.description,
+      material: parsed.data.material,
+      author,
+    });
+    pushModule(mod);
+    return mod;
   });
 
   app.get<{ Params: { moduleId: string } }>('/api/modules/:moduleId', async (req, reply) => {

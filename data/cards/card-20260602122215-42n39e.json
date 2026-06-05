@@ -1,0 +1,131 @@
+{
+  "id": "card-20260602122215-42n39e",
+  "name": "JAFFICK 手套 v1 草案",
+  "summary": "主打防滑；面向高强度训练场景；对标自家爆品 TMT ST11（销量 10378）",
+  "rawText": "JAFFICK力量训练手套，防滑耐磨高强度训练",
+  "userQuadrant": "potential",
+  "author": "内部用户",
+  "status": "draft",
+  "payload": {
+    "parsedIntent": {
+      "category": "手套",
+      "userScenes": [
+        "高强度训练"
+      ],
+      "functions": [
+        "防滑"
+      ],
+      "brand": "JAFFICK",
+      "style": "",
+      "rawText": "JAFFICK力量训练手套，防滑耐磨高强度训练"
+    },
+    "matchedModules": {
+      "织带模块": [
+        {
+          "moduleId": "02.21.05",
+          "moduleType": "织带模块",
+          "moduleName": "3CM防滑刚性带漂白色",
+          "factory": "博凯",
+          "material": "",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "防滑"
+          ],
+          "matchReason": "命中关键词：防滑"
+        }
+      ],
+      "外观模块": [
+        {
+          "moduleId": "03.18.01",
+          "moduleType": "外观模块",
+          "moduleName": "6.24*40mm JAFFICK三色转烫标",
+          "factory": "博凯",
+          "material": "厚板 硅胶印",
+          "reuseCount": 5,
+          "matchedKeywords": [
+            "jaffick"
+          ],
+          "matchReason": "命中关键词：jaffick"
+        },
+        {
+          "moduleId": "03.13.03",
+          "moduleType": "外观模块",
+          "moduleName": "12*50mm JAFFICK黑白色滴塑标",
+          "factory": "博凯",
+          "material": "硅胶标",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "jaffick"
+          ],
+          "matchReason": "命中关键词：jaffick"
+        },
+        {
+          "moduleId": "03.16.05",
+          "moduleType": "外观模块",
+          "moduleName": "5.5*35.2mm JAFFICK字母反光标",
+          "factory": "博凯",
+          "material": "厚板反光印花",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "jaffick"
+          ],
+          "matchReason": "命中关键词：jaffick"
+        },
+        {
+          "moduleId": "03.16.08",
+          "moduleType": "外观模块",
+          "moduleName": "4*170mmJAFFICK反光烫标",
+          "factory": "博凯",
+          "material": "",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "jaffick"
+          ],
+          "matchReason": "命中关键词：jaffick"
+        },
+        {
+          "moduleId": "03.16.11",
+          "moduleType": "外观模块",
+          "moduleName": "6.5*4.94cmJAFFICK J型反光标",
+          "factory": "博凯",
+          "material": "",
+          "reuseCount": 1,
+          "matchedKeywords": [
+            "jaffick"
+          ],
+          "matchReason": "命中关键词：jaffick"
+        }
+      ]
+    },
+    "totalMatchedModules": 6,
+    "assetComparison": {
+      "sameCategorySkuCount": 277,
+      "sameCategoryBrands": [
+        "SERUNA",
+        "TMT",
+        "安踏"
+      ],
+      "topSeller": {
+        "productAbbrev": "ST11",
+        "name": "儿童运动手套",
+        "brand": "TMT",
+        "totalSales": 10378
+      },
+      "totalSalesInCategory": 14574,
+      "competitorIntelCount": 0
+    },
+    "conceptCardDraft": {
+      "name": "JAFFICK 手套 v1 草案",
+      "summary": "主打防滑；面向高强度训练场景；对标自家爆品 TMT ST11（销量 10378）",
+      "moduleCount": 6,
+      "needsValidation": [
+        "版型模块：暂无匹配，建议补关键词或人工挑选",
+        "面料模块：暂无匹配，建议补关键词或人工挑选",
+        "功能模块：暂无匹配，建议补关键词或人工挑选"
+      ]
+    }
+  },
+  "createdAt": "2026-06-02T04:22:15.443Z",
+  "updatedAt": "2026-06-03T01:35:54.999Z",
+  "note": ""
+}

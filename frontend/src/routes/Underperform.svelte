@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { api } from '../lib/api';
+  import Icon from '../lib/Icon.svelte';
   import type { UnderperformItem, SkuDiagnosis, Overview } from '../lib/types';
 
   let overview = $state<Overview | null>(null);
@@ -78,7 +79,7 @@
 </script>
 
 <div class="uf-page">
-  <h1>⚠️ 未起量诊断</h1>
+  <h1><Icon name="alert-triangle" size={20} /> 未起量诊断</h1>
   <p class="sub">销量低/为 0 的 SKU 列表 + 同品类客观数据对比（不评判，给数据让你看）</p>
 
   <!-- 筛选条 -->
@@ -119,7 +120,7 @@
   </div>
 
   {#if error}
-    <div class="card err">❌ {error}</div>
+    <div class="card err"><Icon name="alert-circle" size={14} /> {error}</div>
   {/if}
 
   <div class="main">
@@ -128,7 +129,7 @@
       <div class="side-header">未起量 SKU（按品类百分位升序）</div>
       <div class="side-list">
         {#if listLoading}
-          <div class="muted-center">加载中...</div>
+          <div class="muted-center"><Icon name="loader-2" size={14} class="spin" /> 加载中…</div>
         {:else if items.length === 0}
           <div class="muted-center">没有匹配的 SKU</div>
         {:else}
@@ -166,7 +167,7 @@
     <!-- 右侧诊断 -->
     <section class="content">
       {#if diagLoading}
-        <div class="card muted-center">诊断中...</div>
+        <div class="card muted-center"><Icon name="loader-2" size={14} class="spin" /> 诊断中…</div>
       {:else if diagnosis}
         <!-- 目标信息 -->
         <div class="card target-head">
@@ -241,7 +242,7 @@
         <!-- 同品类爆品对照 -->
         {#if diagnosis.benchmarks.length > 0}
           <div class="card section">
-            <div class="section-title">🏆 同品类销量 TOP {diagnosis.benchmarks.length}（参照）</div>
+            <div class="section-title"><Icon name="trophy" size={15} /> 同品类销量 TOP {diagnosis.benchmarks.length}（参照）</div>
             <table class="bench-table">
               <thead>
                 <tr>
@@ -269,7 +270,7 @@
 
         <!-- 本品所有规格销售明细 -->
         <div class="card section">
-          <div class="section-title">📦 本品所有规格销售明细（{diagnosis.target.specs.length} 行）</div>
+          <div class="section-title"><Icon name="package" size={15} /> 本品所有规格销售明细（{diagnosis.target.specs.length} 行）</div>
           <table class="spec-table">
             <thead>
               <tr>
@@ -296,7 +297,7 @@
 
         <!-- 决策提示（不评判，给方向） -->
         <div class="card decision-hint">
-          🎯 <strong>你可以从下面几个方向自行判断</strong>：
+          <Icon name="target" size={15} /> <strong>你可以从下面几个方向自行判断</strong>：
           <ul>
             <li>价格是否合理（看本品价位 vs 中位）</li>
             <li>是否是渠道问题（看店铺销量分布）</li>
@@ -306,7 +307,7 @@
           <p class="hint-tail muted">系统只摆数据，要不要做、做什么改，由你决定。</p>
         </div>
       {:else}
-        <div class="card muted-center">👈 左侧选一个 SKU 查看诊断数据</div>
+        <div class="card muted-center"><Icon name="chevron-left" size={14} /> 左侧选一个 SKU 查看诊断数据</div>
       {/if}
     </section>
   </div>

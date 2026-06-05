@@ -40,6 +40,10 @@ export interface Module {
   remark: string;
   image_front_id: string;       // DISPIMG ID
   image_back_id: string;
+  /** 用户补录模块的作者（仅 user_added_modules.csv 有）*/
+  author?: string;
+  /** 用户补录模块的确认状态（待审/已确认/已驳回）*/
+  confirm_status?: string;
 }
 
 /**
@@ -112,6 +116,8 @@ export interface ConceptCardSaved {
   author: string;
   /** 状态：草案 → 进入讨论 → 打样 → 归档 */
   status: ConceptCardStatus;
+  /** 业务备注（产品部讨论意见、打样反馈等），可用 LLM 润色 */
+  note: string;
   /** 原始组合器返回（用于详情页完整展示）*/
   payload: {
     parsedIntent: unknown;
@@ -133,6 +139,7 @@ export interface ConceptCardSummary {
   userQuadrant: string;
   author: string;
   status: ConceptCardStatus;
+  note: string;
   totalMatchedModules: number;
   parsedCategory: string;
   parsedBrand: string;

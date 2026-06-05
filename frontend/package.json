@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lan": "vite --host 0.0.0.0",
+    "dev:lan:8002": "vite --host 0.0.0.0 --port 8002",
     "build": "vite build",
     "preview": "vite preview",
+    "preview:lan": "vite preview --host 0.0.0.0",
     "lint": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
+    "@lucide/svelte": "^1.17.0",
     "axios": "^1.7.4",
     "svelte-routing": "^2.13.0"
   },

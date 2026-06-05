@@ -2,6 +2,7 @@
  * axios 客户端 - 与后端通信
  */
 import axios from 'axios';
+import { navigate } from 'svelte-routing';
 import type {
   Overview,
   PageResult,
@@ -21,7 +22,23 @@ import type {
 const http = axios.create({
   baseURL: '/api',
   timeout: 15000,
+  withCredentials: true,
 });
+
+// 401 → 自动跳登录页（保留当前路径用于回跳）
+http.interceptors.response.use(
+  (r) => r,
+  (err) => {
+    if (err?.response?.status === 401) {
+      const here = window.location.pathname + window.location.search;
+      if (here !== '/login' && here !== '/register') {
+        const params = new URLSearchParams({ next: here });
+        navigate(`/login?${params.toString()}`, { replace: true });
+      }
+    }
+    return Promise.reject(err);
+  },
+);
 
 export const api = {
   health: () => http.get<{ ok: boolean; ts: string }>('/health').then((r) => r.data),
@@ -54,8 +71,15 @@ export const api = {
       relatedProducts: Array<ProductAsset & { reusePosition: string }>;
     }>(`/modules/${encodeURIComponent(moduleId)}`).then((r) => r.data),
 
+  /** 用户补录模块 */
+  addModule: (input: { dimension: string; name: string; description?: string; material?: string }) =>
+    http.post<Module>('/modules', input).then((r) => r.data),
+
   compose: (text: string) =>
     http.post<ComposeResult>('/compose', { text }).then((r) => r.data),
+
+  polish: (text: string) =>
+    http.post<{ polished: string }>('/polish', { text }).then((r) => r.data),
 
   categoryMap: (minCategorySize?: number) =>
     http.get<CategoryMapResult>('/category-map', { params: { minCategorySize } }).then((r) => r.data),
@@ -80,7 +104,14 @@ export const api = {
 
   updateCard: (
     id: string,
-    patch: { name?: string; userQuadrant?: string; status?: ConceptCardStatus },
+    patch: {
+      name?: string;
+      summary?: string;
+      userQuadrant?: string;
+      status?: ConceptCardStatus;
+      note?: string;
+      parsedIntent?: Record<string, unknown>;
+    },
   ) => http.patch<ConceptCardSaved>(`/cards/${encodeURIComponent(id)}`, patch).then((r) => r.data),
 
   deleteCard: (id: string) =>

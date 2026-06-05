@@ -56,12 +56,17 @@ const STYLE_KEYWORDS: Record<string, string[]> = {
 };
 
 // ============ Types ============
+/**
+ * 5 维度解析结果。
+ * 所有维度都是数组（v1.1 起，原本品类/品牌/风格是单值，现在支持多值自由增减）。
+ * 资产对照只用 categories[0]（最相关的品类）做 SKU lookup。
+ */
 export interface ParsedIntent {
-  category: string;            // 品类（最多 1 个，匹配 product_assets.category）
-  userScenes: string[];        // 用户场景（可多个）
-  functions: string[];         // 功能感受（可多个）
-  brand: string;               // 品牌（最多 1 个）
-  style: string;               // 风格调性（最多 1 个）
+  categories: string[];        // 品类（按相关性排序，资产对照用 [0]）
+  userScenes: string[];        // 用户场景
+  functions: string[];         // 功能感受
+  brands: string[];            // 品牌
+  styles: string[];            // 风格调性
   rawText: string;
 }
 
@@ -107,72 +112,66 @@ export interface ComposeResult {
   conceptCardDraft: ConceptCardDraft;
 }
 
-// ============ Step 1: 解析 5 维度 ============
-function parseIntent(text: string, allCategories: string[], allBrands: string[]): ParsedIntent {
+// ============ Step 1: 解析 5 维度（关键词字典 fallback）============
+// 当 LLM 关闭或失败时用这个
+export function parseIntentByKeyword(
+  text: string,
+  allCategories: string[],
+  allBrands: string[],
+): ParsedIntent {
   const lowText = text.toLowerCase();
 
-  // 品类匹配 - 两步：① 直接包含搜索 ② 反向模糊（品类名包含输入的短词）
-  // 优先匹配长字符串（避免"护膝"误匹配到"膝"）
+  // 品类匹配 - 优先匹配长字符串（避免"护膝"误匹配到"膝"）
   const sortedCats = [...allCategories].sort((a, b) => b.length - a.length);
-  let category = '';
+  const categories: string[] = [];
   for (const c of sortedCats) {
     if (c && text.includes(c)) {
-      category = c;
-      break;
+      categories.push(c);
+      if (categories.length >= 3) break;  // 关键词阶段最多回 3 个
     }
   }
-  // 反向模糊：输入"护腰" 匹配 "运动护腰"/"健身护腰"；输入"眼罩" 匹配 "睡眠眼罩"
-  // 取 2 字以上的可能品类词试探
-  if (!category) {
-    const candidates: string[] = [];
+  // 反向模糊：输入"护腰" 匹配 "运动护腰"/"健身护腰"
+  if (categories.length === 0) {
     for (const c of sortedCats) {
       if (c.length <= 2) continue;
-      // 用品类名末尾 2-3 字尝试匹配，比如 "运动护腰" → "护腰"
       for (let len = 2; len <= Math.min(4, c.length); len++) {
         const tail = c.slice(-len);
         if (tail.length >= 2 && text.includes(tail)) {
-          candidates.push(c);
+          categories.push(c);
           break;
         }
       }
-    }
-    if (candidates.length > 0) {
-      // 取最短的（最具体）品类
-      category = candidates.sort((a, b) => a.length - b.length)[0] ?? '';
+      if (categories.length >= 3) break;
     }
   }
 
   // 品牌匹配（大小写不敏感）
-  let brand = '';
+  const brands: string[] = [];
   for (const b of allBrands) {
     if (b && lowText.includes(b.toLowerCase())) {
-      brand = b;
-      break;
+      brands.push(b);
     }
   }
 
-  // 场景：所有命中的都返回
+  // 场景
   const userScenes: string[] = [];
   for (const [scene, kws] of Object.entries(SCENE_KEYWORDS)) {
     if (kws.some((kw) => text.includes(kw))) userScenes.push(scene);
   }
 
-  // 功能感受：所有命中
+  // 功能
   const functions: string[] = [];
   for (const [fn, kws] of Object.entries(FUNCTION_KEYWORDS)) {
     if (kws.some((kw) => text.includes(kw))) functions.push(fn);
   }
 
-  // 风格：取第一个命中
-  let style = '';
+  // 风格
+  const styles: string[] = [];
   for (const [s, kws] of Object.entries(STYLE_KEYWORDS)) {
-    if (kws.some((kw) => text.includes(kw))) {
-      style = s;
-      break;
-    }
+    if (kws.some((kw) => text.includes(kw))) styles.push(s);
   }
 
-  return { category, userScenes, functions, brand, style, rawText: text };
+  return { categories, brands, userScenes, functions, styles, rawText: text };
 }
 
 // ============ Step 2: 模块匹配 ============
@@ -190,10 +189,17 @@ function matchModules(
   // 把意图中的所有功能词 + 品牌词 + 风格词组合成查询词
   const queryTerms: string[] = [];
   for (const fn of intent.functions) {
-    queryTerms.push(...(FUNCTION_KEYWORDS[fn] ?? []));
+    // 字典里有就拿同义词，没有就用功能本身（LLM 可能产出字典外的词）
+    const syns = FUNCTION_KEYWORDS[fn];
+    if (syns && syns.length > 0) queryTerms.push(...syns);
+    else queryTerms.push(fn);
   }
-  if (intent.brand) queryTerms.push(intent.brand.toLowerCase());
-  if (intent.style) queryTerms.push(...(STYLE_KEYWORDS[intent.style] ?? []));
+  for (const b of intent.brands) queryTerms.push(b.toLowerCase());
+  for (const s of intent.styles) {
+    const syns = STYLE_KEYWORDS[s];
+    if (syns && syns.length > 0) queryTerms.push(...syns);
+    else queryTerms.push(s);
+  }
 
   // 按模块类型分组
   const result: ModuleMatchByDimension = {};
@@ -241,7 +247,9 @@ function getAssetComparison(
   products: ProductAsset[],
   competitors: Array<{ l1_category: string }>
 ): AssetComparison {
-  if (!intent.category) {
+  // 用 categories[0] 做主品类对照（多品类的话只看第一个）
+  const primaryCategory = intent.categories[0] ?? '';
+  if (!primaryCategory) {
     return {
       sameCategorySkuCount: 0,
       sameCategoryBrands: [],
@@ -251,7 +259,7 @@ function getAssetComparison(
     };
   }
 
-  const sameCategoryProducts = products.filter((p) => p.category === intent.category);
+  const sameCategoryProducts = products.filter((p) => p.category === primaryCategory);
 
   const brandSet = new Set<string>();
   const productAbbrevSales = new Map<string, { name: string; brand: string; totalSales: number }>();
@@ -285,7 +293,7 @@ function getAssetComparison(
     }
   }
 
-  const competitorIntelCount = competitors.filter((c) => c.l1_category === intent.category).length;
+  const competitorIntelCount = competitors.filter((c) => c.l1_category === primaryCategory).length;
 
   return {
     sameCategorySkuCount: sameCategoryProducts.length,
@@ -303,17 +311,16 @@ function generateConceptCard(
   matched: ModuleMatchByDimension,
   comparison: AssetComparison
 ): ConceptCardDraft {
-  // 名字：[品牌] + [风格?] + [品类] 草案
+  // 名字：[品牌 join /] + [风格 join /] + [品类[0]] 草案
   const nameparts: string[] = [];
-  if (intent.brand) nameparts.push(intent.brand);
-  if (intent.style) nameparts.push(intent.style);
-  if (intent.category) nameparts.push(intent.category);
+  if (intent.brands.length > 0) nameparts.push(intent.brands.join('/'));
+  if (intent.styles.length > 0) nameparts.push(intent.styles.join('/'));
+  if (intent.categories.length > 0) nameparts.push(intent.categories[0]!);
   const baseName = nameparts.join(' ').trim() || '新概念产品';
   const name = `${baseName} v1 草案`;
 
   const moduleCount = Object.values(matched).reduce((sum, arr) => sum + arr.length, 0);
 
-  // summary
   const fnText = intent.functions.length > 0 ? `主打${intent.functions.join('、')}` : '';
   const sceneText = intent.userScenes.length > 0 ? `面向${intent.userScenes.join('、')}场景` : '';
   const benchmark = comparison.topSeller
@@ -322,7 +329,6 @@ function generateConceptCard(
 
   const summary = [fnText, sceneText, benchmark].filter(Boolean).join('；') || '基于解析维度的初步草案';
 
-  // 缺少哪些维度的模块
   const needsValidation: string[] = [];
   const expectedDims = ['版型模块', '面料模块', '功能模块'];
   for (const dim of expectedDims) {
@@ -330,20 +336,25 @@ function generateConceptCard(
       needsValidation.push(`${dim}：暂无匹配，建议补关键词或人工挑选`);
     }
   }
-  if (!intent.brand) needsValidation.push('品牌：未指定，建议明确归属品牌');
-  if (!intent.category) needsValidation.push('品类：未识别到已有品类，可能是品类地图缺失机会');
+  if (intent.brands.length === 0) needsValidation.push('品牌：未指定，建议明确归属品牌');
+  if (intent.categories.length === 0) needsValidation.push('品类：未识别到已有品类，可能是品类地图缺失机会');
 
   return { name, summary, moduleCount, needsValidation };
 }
 
 // ============ 总入口 ============
+import { parseIntentWithLLM } from './llmParser.js';
+
 export async function compose(text: string): Promise<ComposeResult> {
   const { products, modules, links, competitors, overview } = getStore();
 
   const allCategories = overview.categoriesTop.map((c) => c.name);
   const allBrands = overview.brandsTop.map((b) => b.name);
 
-  const parsedIntent = parseIntent(text, allCategories, allBrands);
+  // 优先 LLM；失败/未配置时回退到关键词字典
+  const llmParsed = await parseIntentWithLLM(text, allCategories, allBrands);
+  const parsedIntent = llmParsed ?? parseIntentByKeyword(text, allCategories, allBrands);
+
   const matchedModules = matchModules(parsedIntent, modules, links);
   const totalMatchedModules = Object.values(matchedModules).reduce((s, arr) => s + arr.length, 0);
   const assetComparison = getAssetComparison(parsedIntent, products, competitors);

@@ -74,13 +74,24 @@ export interface ProductsQuery {
 }
 
 // ============ 组合器 (M3) ============
+// v1.1 起：5 维度全部 string[]，可自由增减
 export interface ParsedIntent {
-  category: string;
+  categories: string[];
+  brands: string[];
   userScenes: string[];
   functions: string[];
-  brand: string;
-  style: string;
+  styles: string[];
   rawText: string;
+}
+
+/** 兼容老的 ConceptCard payload（v1 单值字段） */
+export interface ParsedIntentLegacy {
+  category?: string;
+  brand?: string;
+  style?: string;
+  userScenes?: string[];
+  functions?: string[];
+  rawText?: string;
 }
 
 export interface MatchedModule {
@@ -136,6 +147,7 @@ export interface ConceptCardSummary {
   userQuadrant: string;
   author: string;
   status: ConceptCardStatus;
+  note: string;
   totalMatchedModules: number;
   parsedCategory: string;
   parsedBrand: string;
@@ -159,6 +171,7 @@ export interface CreateCardInput {
   rawText: string;
   userQuadrant: string;
   author?: string;
+  note?: string;
   payload: ConceptCardSaved['payload'];
 }
 
